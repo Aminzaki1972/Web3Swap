@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Web3Swap - Fast, secure and non-custodial Web3 token swaps.">
+  <title>Web3Swap — Swap. Trade. Explore.</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="bg-glow glow-one"></div>
+  <div class="bg-glow glow-two"></div>
+
+  <header class="navbar">
+    <a class="brand" href="#">
+      <img src="assets/logo.png" alt="Web3Swap">
+      <span>Web3<span>Swap</span></span>
+    </a>
+
+    <nav>
+      <a href="#swap">Swap</a>
+      <a href="#features">Features</a>
+      <a href="#about">About</a>
+    </nav>
+
+    <button class="wallet-btn" id="connectWallet">Connect Wallet</button>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">SWAP • TRADE • EXPLORE</span>
+        <h1>Simple swaps.<br><span>Web3 powered.</span></h1>
+        <p>Swap digital assets through a clean, non-custodial experience built for the Web3 community.</p>
+        <a class="hero-link" href="#swap">Start swapping <span>→</span></a>
+      </div>
+
+      <div class="swap-card" id="swap">
+        <div class="card-head">
+          <div>
+            <h2>Swap</h2>
+            <p>Trade tokens instantly</p>
+          </div>
+          <button class="settings" aria-label="Swap settings">⚙</button>
+        </div>
+
+        <div class="token-box">
+          <label>You pay</label>
+          <div class="token-row">
+            <input id="payAmount" type="number" min="0" step="any" placeholder="0.00">
+            <button class="token-select">BNB <span>⌄</span></button>
+          </div>
+          <small>Balance: <span id="balance">—</span></small>
+        </div>
+
+        <button class="switch-btn" id="switchTokens" aria-label="Switch tokens">↕</button>
+
+        <div class="token-box">
+          <label>You receive</label>
+          <div class="token-row">
+            <input id="receiveAmount" type="text" placeholder="0.00" readonly>
+            <button class="token-select">USDT <span>⌄</span></button>
+          </div>
+          <small>Estimated amount</small>
+        </div>
+
+        <div class="quote">
+          <div><span>Rate</span><strong id="rate">—</strong></div>
+          <div><span>Network</span><strong>BNB Smart Chain</strong></div>
+          <div><span>Slippage</span><strong>0.50%</strong></div>
+        </div>
+
+        <button class="swap-btn" id="swapButton">Connect Wallet to Swap</button>
+        <p class="notice">You remain in control of your assets. Transactions require wallet confirmation.</p>
+      </div>
+    </section>
+
+    <section class="features" id="features">
+      <div class="section-title">
+        <span class="eyebrow">WHY WEB3SWAP</span>
+        <h2>Built for the next generation of Web3</h2>
+      </div>
+
+      <div class="feature-grid">
+        <article><div class="icon">◈</div><h3>Non-Custodial</h3><p>Your assets stay in your wallet. Web3Swap never asks for your private key.</p></article>
+        <article><div class="icon">↔</div><h3>Simple Swaps</h3><p>A focused interface for comparing tokens and preparing a swap without unnecessary complexity.</p></article>
+        <article><div class="icon">⚡</div><h3>Fast & Modern</h3><p>Designed for a responsive experience across desktop, tablet and mobile.</p></article>
+      </div>
+    </section>
+
+    <section class="about" id="about">
+      <div>
+        <span class="eyebrow">WEB3SWAP</span>
+        <h2>One interface for your Web3 journey.</h2>
+      </div>
+      <p>Web3Swap starts with BNB Smart Chain and is designed so additional networks can be added later without rebuilding the product.</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="brand footer-brand">
+      <img src="assets/logo.png" alt="">
+      <span>Web3<span>Swap</span></span>
+    </div>
+    <p>© 2026 Web3Swap. Built for Web3.</p>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
