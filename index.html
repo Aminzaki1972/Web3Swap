@@ -1,110 +1,371 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Web3Swap - Fast, secure and non-custodial Web3 token swaps.">
-  <title>Web3Swap — Swap. Trade. Explore.</title>
-  <link rel="stylesheet" href="css/style.css">
+  <title>Web3Swap | التبادل اللامركزي الرقمي</title>
+  
+  <style>
+    :root {
+      --bg-color: #0d1117;
+      --card-bg: #161b22;
+      --accent-color: #f3ba2f; /* لون BNB */
+      --text-color: #f0f6fc;
+      --text-secondary: #8b949e;
+      --border-color: #30363d;
+      --button-hover: #e0ab26;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* Navbar Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid var(--border-color);
+      background-color: rgba(22, 27, 34, 0.8);
+      backdrop-filter: blur(10px);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--text-color);
+      text-decoration: none;
+    }
+
+    .logo span {
+      color: var(--accent-color);
+    }
+
+    nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    nav a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: var(--accent-color);
+    }
+
+    .btn-connect {
+      background-color: var(--accent-color);
+      color: #000;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .btn-connect:hover {
+      background-color: var(--button-hover);
+    }
+
+    /* Main Section */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 3rem 1rem;
+    }
+
+    .swap-container {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 450px;
+      padding: 1.5rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    }
+
+    .swap-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .swap-header h2 {
+      font-size: 1.3rem;
+    }
+
+    .input-box {
+      background-color: #0d1117;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .input-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .input-box input {
+      background: transparent;
+      border: none;
+      color: var(--text-color);
+      font-size: 1.5rem;
+      width: 60%;
+      outline: none;
+    }
+
+    .token-select {
+      background-color: #21262d;
+      color: var(--text-color);
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      font-weight: bold;
+      border: 1px solid var(--border-color);
+    }
+
+    .balance-label {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-top: 0.5rem;
+      display: block;
+    }
+
+    .swap-icon {
+      text-align: center;
+      margin: 0.5rem 0;
+      color: var(--accent-color);
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .details-box {
+      margin: 1rem 0;
+      padding: 0.8rem;
+      background-color: #0d1117;
+      border-radius: 8px;
+      font-size: 0.85rem;
+    }
+
+    .details-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.4rem;
+      color: var(--text-secondary);
+    }
+
+    .details-row span.val {
+      color: var(--text-color);
+      font-weight: bold;
+    }
+
+    .btn-swap {
+      width: 100%;
+      background-color: var(--accent-color);
+      color: #000;
+      border: none;
+      padding: 1rem;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .btn-swap:hover {
+      background-color: var(--button-hover);
+    }
+
+    /* Features & About Section */
+    .features-section {
+      max-width: 900px;
+      margin-top: 4rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      width: 100%;
+    }
+
+    .feature-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      padding: 1.5rem;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .feature-card h3 {
+      color: var(--accent-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-card p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border-color);
+      text-align: center;
+      padding: 1.5rem;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-top: 3rem;
+    }
+  </style>
 </head>
 <body>
-  <div class="bg-glow glow-one"></div>
-  <div class="bg-glow glow-two"></div>
 
-  <header class="navbar">
-    <a class="brand" href="#">
-      <img src="assets/logo.png" alt="Web3Swap">
-      <span>Web3<span>Swap</span></span>
+  <!-- Header -->
+  <header>
+    <a href="#" class="logo">
+      Web3<span>Swap</span>
     </a>
-
     <nav>
-      <a href="#swap">Swap</a>
-      <a href="#features">Features</a>
-      <a href="#about">About</a>
+      <a href="#swap">التبادل</a>
+      <a href="#features">المميزات</a>
+      <a href="#about">عن المنصة</a>
     </nav>
-
-    <button class="wallet-btn" id="connectWallet">Connect Wallet</button>
+    <button class="btn-connect" id="connectWalletBtn">ربط المحفظة</button>
   </header>
 
+  <!-- Main Content -->
   <main>
-    <section class="hero">
-      <div class="hero-copy">
-        <span class="eyebrow">SWAP • TRADE • EXPLORE</span>
-        <h1>Simple swaps.<br><span>Web3 powered.</span></h1>
-        <p>Swap digital assets through a clean, non-custodial experience built for the Web3 community.</p>
-        <a class="hero-link" href="#swap">Start swapping <span>→</span></a>
+    <section id="swap" class="swap-container">
+      <div class="swap-header">
+        <h2>تبادل العملات</h2>
       </div>
 
-      <div class="swap-card" id="swap">
-        <div class="card-head">
-          <div>
-            <h2>Swap</h2>
-            <p>Trade tokens instantly</p>
-          </div>
-          <button class="settings" aria-label="Swap settings">⚙</button>
+      <!-- Token Pay -->
+      <div class="input-box">
+        <div class="input-row">
+          <input type="number" id="payAmount" placeholder="0.0" dir="ltr">
+          <div class="token-select">BNB</div>
         </div>
-
-        <div class="token-box">
-          <label>You pay</label>
-          <div class="token-row">
-            <input id="payAmount" type="number" min="0" step="any" placeholder="0.00">
-            <button class="token-select">BNB <span>⌄</span></button>
-          </div>
-          <small>Balance: <span id="balance">—</span></small>
-        </div>
-
-        <button class="switch-btn" id="switchTokens" aria-label="Switch tokens">↕</button>
-
-        <div class="token-box">
-          <label>You receive</label>
-          <div class="token-row">
-            <input id="receiveAmount" type="text" placeholder="0.00" readonly>
-            <button class="token-select">USDT <span>⌄</span></button>
-          </div>
-          <small>Estimated amount</small>
-        </div>
-
-        <div class="quote">
-          <div><span>Rate</span><strong id="rate">—</strong></div>
-          <div><span>Network</span><strong>BNB Smart Chain</strong></div>
-          <div><span>Slippage</span><strong>0.50%</strong></div>
-        </div>
-
-        <button class="swap-btn" id="swapButton">Connect Wallet to Swap</button>
-        <p class="notice">You remain in control of your assets. Transactions require wallet confirmation.</p>
+        <span class="balance-label">الرصيد: <span id="bnbBalance">—</span></span>
       </div>
+
+      <!-- Swap Icon -->
+      <div class="swap-icon">↓</div>
+
+      <!-- Token Receive -->
+      <div class="input-box">
+        <div class="input-row">
+          <input type="number" id="receiveAmount" placeholder="0.0" readonly dir="ltr">
+          <div class="token-select">USDT</div>
+        </div>
+        <span class="balance-label">المبلغ المقدر</span>
+      </div>
+
+      <!-- Details -->
+      <div class="details-box">
+        <div class="details-row">
+          <span>سعر الصرف</span>
+          <span class="val">1 BNB ≈ 600 USDT</span>
+        </div>
+        <div class="details-row">
+          <span>الشبكة</span>
+          <span class="val">BNB Smart Chain</span>
+        </div>
+        <div class="details-row">
+          <span>نسبة الانزلاق (Slippage)</span>
+          <span class="val">0.50%</span>
+        </div>
+      </div>
+
+      <!-- Action Button -->
+      <button class="btn-swap" id="actionBtn">ربط المحفظة للبدء</button>
     </section>
 
-    <section class="features" id="features">
-      <div class="section-title">
-        <span class="eyebrow">WHY WEB3SWAP</span>
-        <h2>Built for the next generation of Web3</h2>
+    <!-- Features -->
+    <section id="features" class="features-section">
+      <div class="feature-card">
+        <h3>غير حضاني (Non-Custodial)</h3>
+        <p>أصولك تبقى دائماً في محفظتك الشخصية بدون أي تدخل خارجي.</p>
       </div>
-
-      <div class="feature-grid">
-        <article><div class="icon">◈</div><h3>Non-Custodial</h3><p>Your assets stay in your wallet. Web3Swap never asks for your private key.</p></article>
-        <article><div class="icon">↔</div><h3>Simple Swaps</h3><p>A focused interface for comparing tokens and preparing a swap without unnecessary complexity.</p></article>
-        <article><div class="icon">⚡</div><h3>Fast & Modern</h3><p>Designed for a responsive experience across desktop, tablet and mobile.</p></article>
+      <div class="feature-card">
+        <h3>سريع ومباشر</h3>
+        <p>تنفيذ العمليات فوراً على شبكة BNB Smart Chain بأقل رسوم.</p>
       </div>
-    </section>
-
-    <section class="about" id="about">
-      <div>
-        <span class="eyebrow">WEB3SWAP</span>
-        <h2>One interface for your Web3 journey.</h2>
+      <div class="feature-card">
+        <h3>آمن وشفاف</h3>
+        <p>جميع العمليات تتم عبر عقود ذكية موثوقة ومفتوحة المصدر.</p>
       </div>
-      <p>Web3Swap starts with BNB Smart Chain and is designed so additional networks can be added later without rebuilding the product.</p>
     </section>
   </main>
 
+  <!-- Footer -->
   <footer>
-    <div class="brand footer-brand">
-      <img src="assets/logo.png" alt="">
-      <span>Web3<span>Swap</span></span>
-    </div>
-    <p>© 2026 Web3Swap. Built for Web3.</p>
+    <p>© 2026 Web3Swap. جميع الحقوق محفوظة.</p>
   </footer>
 
-  <script src="js/app.js"></script>
+  <!-- JavaScript Interaction -->
+  <script>
+    const payInput = document.getElementById('payAmount');
+    const receiveInput = document.getElementById('receiveAmount');
+    const connectBtn = document.getElementById('connectWalletBtn');
+    const actionBtn = document.getElementById('actionBtn');
+
+    // سعر تجريبي مسبق للعملية
+    const mockRate = 600;
+
+    payInput.addEventListener('input', (e) => {
+      const val = parseFloat(e.target.value);
+      if (!isNaN(val) && val > 0) {
+        receiveInput.value = (val * mockRate).toFixed(2);
+      } else {
+        receiveInput.value = '';
+      }
+    });
+
+    // محاكاة زر ربط المحفظة
+    async function connectWallet() {
+      if (typeof window.ethereum !== 'undefined') {
+        try {
+          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+          const account = accounts[0];
+          const shortAddress = account.substring(0, 6) + '...' + account.substring(account.length - 4);
+          
+          connectBtn.innerText = shortAddress;
+          actionBtn.innerText = 'تبادل الآن (Swap)';
+          alert('تم ربط المحفظة بنجاح: ' + account);
+        } catch (error) {
+          console.error(error);
+          alert('تعذر الاتصال بالمحفظة');
+        }
+      } else {
+        alert('يرجى تثبيت محفظة MetaMask لاستخدام هذه المنصة');
+      }
+    }
+
+    connectBtn.addEventListener('click', connectWallet);
+    actionBtn.addEventListener('click', connectWallet);
+  </script>
 </body>
-</html>
+  </html>
