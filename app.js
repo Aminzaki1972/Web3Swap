@@ -1,334 +1,137 @@
 /* =========================================================
    Web3Swap MVP
-   app.js — REAL BNB/USDT QUOTE
-   BNB Smart Chain
+   app.js
+   BNB Smart Chain Mainnet
+   BNB -> USDT
+   PancakeSwap V2
    ========================================================= */
 
-const WEB3SWAP = {
-  chainId: "0x38",
-  rpcUrl: "https://bsc-dataseed.binance.org/",
-  explorer: "https://bscscan.com",
+"use strict";
 
-  pair: "0x16b9a82891338f9ba80e2d6970fdda79d1eb0dae",
+/* =========================================================
+   CONFIG
+========================================================= */
 
-  usdt: "0x55d398326f99059ff775485246999027b3197955",
+const CONFIG = {
 
-  wbnb: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+    CHAIN_ID: 56,
+    CHAIN_ID_HEX: "0x38",
 
-  feeNumerator: 9975n,
-  feeDenominator: 10000n
-};
+    NETWORK_NAME: "BNB Smart Chain",
 
+    RPC_URL:
+        "https://bsc-dataseed.bnbchain.org",
 
-const tokens = {
+    EXPLORER:
+        "https://bscscan.com/tx/",
 
-  BNB: {
-    symbol: "BNB",
-    name: "BNB",
-    cls: "bnb",
-    decimals: 18
-  },
+    ROUTER:
+        "0x10ED43C718714eb63d5aA57B78B54704E256024E",
 
-  USDT: {
-    symbol: "USDT",
-    name: "Tether USD",
-    cls: "usdt",
-    decimals: 18,
-    address: WEB3SWAP.usdt
-  },
+    WBNB:
+        "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
 
-  USDC: {
-    symbol: "USDC",
-    name: "USD Coin",
-    cls: "usdc",
-    decimals: 18
-  },
+    USDT:
+        "0x55d398326f99059fF775485246999027B3197955",
 
-  WBNB: {
-    symbol: "WBNB",
-    name: "Wrapped BNB",
-    cls: "wbnb",
-    decimals: 18,
-    address: WEB3SWAP.wbnb
-  }
+    USDT_DECIMALS: 18,
+
+    SLIPPAGE:
+        0.005,
+
+    DEADLINE_MINUTES:
+        20
 
 };
 
 
-const ERC20_ABI = [
-  {
-    name: "balanceOf",
-    type: "function",
-    stateMutability: "view",
-    inputs: [
-      {
-        name: "account",
-        type: "address"
-      }
-    ],
-    outputs: [
-      {
-        name: "",
-        type: "uint256"
-      }
-    ]
-  },
+/* =========================================================
+   GLOBALS
+========================================================= */
 
-  {
-    name: "decimals",
-    type: "function",
-    stateMutability: "view",
-    inputs: [],
-    outputs: [
-      {
-        name: "",
-        type: "uint8"
-      }
-    ]
-  }
-];
+let provider = null;
+let signer = null;
+let userAddress = null;
 
-
-const PAIR_ABI = [
-  {
-    name: "getReserves",
-    type: "function",
-    stateMutability: "view",
-    inputs: [],
-    outputs: [
-      {
-        name: "reserve0",
-        type: "uint112"
-      },
-      {
-        name: "reserve1",
-        type: "uint112"
-      },
-      {
-        name: "blockTimestampLast",
-        type: "uint32"
-      }
-    ]
-  },
-
-  {
-    name: "token0",
-    type: "function",
-    stateMutability: "view",
-    inputs: [],
-    outputs: [
-      {
-        name: "",
-        type: "address"
-      }
-    ]
-  },
-
-  {
-    name: "token1",
-    type: "function",
-    stateMutability: "view",
-    inputs: [],
-    outputs: [
-      {
-        name: "",
-        type: "address"
-      }
-    ]
-  }
-];
-
-
-let selecting = "pay";
-
-let paySymbol = "BNB";
-
-let receiveSymbol = "USDT";
-
-let connected = false;
-
-let account = null;
-
-let quoteTimer = null;
+let ethersLoaded = false;
 
 
 /* =========================================================
-   Helper
-   ========================================================= */
+   DOM
+========================================================= */
 
-const $ = (id) => document.getElementById(id);
+const payInput =
+    document.getElementById("payAmount");
 
+const receiveInput =
+    document.getElementById("receiveAmount");
 
-function shortAddress(address) {
+const connectBtn =
+    document.getElementById("connectWalletBtn");
 
-  if (!address) {
-    return "";
-  }
+const actionBtn =
+    document.getElementById("actionBtn");
 
-  return `${address.slice(0, 6)}...${address.slice(-4)}`;
+const bnbBalance =
+    document.getElementById("bnbBalance");
 
-}
-
-
-function showToast(message) {
-
-  const toast = $("toast");
-
-  if (!toast) {
-    return;
-  }
-
-  toast.textContent = message;
-
-  toast.classList.remove("hidden");
-
-  clearTimeout(showToast.timer);
-
-  showToast.timer = setTimeout(() => {
-
-    toast.classList.add("hidden");
-
-  }, 3000);
-
-}
-
-
-function renderTokenButton(buttonId, symbol) {
-
-  const token = tokens[symbol];
-
-  if (!token || !$(buttonId)) {
-    return;
-  }
-
-  let icon = "◆";
-
-  if (symbol === "USDT") {
-    icon = "₮";
-  }
-
-  if (symbol === "USDC") {
-    icon = "$";
-  }
-
-  $(buttonId).innerHTML = `
-    <span class="token-icon ${token.cls}">
-      ${icon}
-    </span>
-
-    <span>
-      ${symbol}
-    </span>
-
-    <span class="chevron">
-      ⌄
-    </span>
-  `;
-
-  $(buttonId).dataset.token = symbol;
-
-}
+const reverseSwapBtn =
+    document.getElementById("reverseSwapBtn");
 
 
 /* =========================================================
-   Token selector
-   ========================================================= */
+   LOAD ETHERS
+========================================================= */
 
-function openTokenModal(side) {
+async function loadEthers() {
 
-  selecting = side;
+    if (window.ethers) {
 
-  const modal = $("tokenModal");
+        ethersLoaded = true;
 
-  const list = $("tokenList");
-
-  if (!modal || !list) {
-    return;
-  }
-
-  modal.classList.remove("hidden");
-
-  list.innerHTML = Object.values(tokens)
-    .map((token) => {
-
-      let icon = "◆";
-
-      if (token.symbol === "USDT") {
-        icon = "₮";
-      }
-
-      if (token.symbol === "USDC") {
-        icon = "$";
-      }
-
-      return `
-        <button
-          class="token-option"
-          data-symbol="${token.symbol}"
-        >
-
-          <span
-            class="token-icon ${token.cls}"
-          >
-            ${icon}
-          </span>
-
-          <span>
-
-            <strong>
-              ${token.symbol}
-            </strong>
-
-            <br>
-
-            <small>
-              ${token.name}
-            </small>
-
-          </span>
-
-          <small>
-            BNB Chain
-          </small>
-
-        </button>
-      `;
-
-    })
-    .join("");
+        return true;
+    }
 
 
-  document
-    .querySelectorAll(".token-option")
-    .forEach((button) => {
+    return new Promise((resolve, reject) => {
 
-      button.onclick = () => {
+        const script =
+            document.createElement("script");
 
-        const symbol =
-          button.dataset.symbol;
+        script.src =
+            "https://cdn.jsdelivr.net/npm/ethers@6.15.0/dist/ethers.umd.min.js";
 
-        if (selecting === "pay") {
+        script.onload = function () {
 
-          paySymbol = symbol;
+            if (window.ethers) {
 
-        } else {
+                ethersLoaded = true;
 
-          receiveSymbol = symbol;
+                resolve(true);
 
-        }
+            } else {
 
-        renderTokenButton(
-          selecting === "pay"
-            ? "payToken"
-            : "receiveToken",
-          symbol
-        );
+                reject(
+                    new Error(
+                        "Ethers library failed to load."
+                    )
+                );
 
-        modal.classList.add("hidden");
+            }
 
-        updateQuote();
+        };
 
-      };
+        script.onerror = function () {
+
+            reject(
+                new Error(
+                    "Could not load ethers library."
+                )
+            );
+
+        };
+
+        document.head.appendChild(script);
 
     });
 
@@ -336,1365 +139,1394 @@ function openTokenModal(side) {
 
 
 /* =========================================================
-   BNB Smart Chain
-   ========================================================= */
+   CHECK WALLET
+========================================================= */
 
-async function switchToBSC() {
+function walletAvailable() {
 
-  if (!window.ethereum) {
-    return false;
-  }
+    return (
+        typeof window.ethereum !==
+        "undefined"
+    );
 
-  try {
+}
 
-    const currentChain =
-      await window.ethereum.request({
-        method: "eth_chainId"
-      });
+
+/* =========================================================
+   FORMAT ADDRESS
+========================================================= */
+
+function shortAddress(address) {
+
+    if (!address) {
+
+        return "—";
+
+    }
+
+    return (
+        address.substring(0, 6) +
+        "..." +
+        address.substring(
+            address.length - 4
+        )
+    );
+
+}
+
+
+/* =========================================================
+   CHECK NETWORK
+========================================================= */
+
+async function getChainId() {
+
+    const chainId =
+        await window.ethereum.request({
+            method: "eth_chainId"
+        });
+
+    return parseInt(
+        chainId,
+        16
+    );
+
+}
+
+
+/* =========================================================
+   SWITCH TO BNB MAINNET
+========================================================= */
+
+async function switchToBNB() {
+
+    try {
+
+        await window.ethereum.request({
+
+            method:
+                "wallet_switchEthereumChain",
+
+            params: [
+                {
+                    chainId:
+                        CONFIG.CHAIN_ID_HEX
+                }
+            ]
+
+        });
+
+    } catch (error) {
+
+        /*
+         * 4902 = network not added
+         */
+
+        if (
+            error &&
+            error.code === 4902
+        ) {
+
+            await window.ethereum.request({
+
+                method:
+                    "wallet_addEthereumChain",
+
+                params: [
+
+                    {
+
+                        chainId:
+                            CONFIG.CHAIN_ID_HEX,
+
+                        chainName:
+                            CONFIG.NETWORK_NAME,
+
+                        nativeCurrency: {
+
+                            name:
+                                "BNB",
+
+                            symbol:
+                                "BNB",
+
+                            decimals:
+                                18
+
+                        },
+
+                        rpcUrls: [
+                            CONFIG.RPC_URL
+                        ],
+
+                        blockExplorerUrls: [
+                            "https://bscscan.com"
+                        ]
+
+                    }
+
+                ]
+
+            });
+
+        } else {
+
+            throw error;
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   CREATE PROVIDER
+========================================================= */
+
+async function createProvider() {
+
+    if (!walletAvailable()) {
+
+        throw new Error(
+            "لم يتم العثور على محفظة Web3."
+        );
+
+    }
+
+
+    await loadEthers();
+
+
+    provider =
+        new ethers.BrowserProvider(
+            window.ethereum
+        );
+
+
+    signer =
+        await provider.getSigner();
+
+
+    userAddress =
+        await signer.getAddress();
+
+
+    return true;
+
+}
+
+
+/* =========================================================
+   GET BNB BALANCE
+========================================================= */
+
+async function updateBNBBalance() {
+
+    try {
+
+        if (
+            !provider ||
+            !userAddress
+        ) {
+
+            return;
+
+        }
+
+
+        const balance =
+            await provider.getBalance(
+                userAddress
+            );
+
+
+        const formatted =
+            ethers.formatEther(
+                balance
+            );
+
+
+        bnbBalance.innerText =
+            Number(formatted)
+                .toFixed(4) +
+            " BNB";
+
+    } catch (error) {
+
+        console.error(
+            "Balance error:",
+            error
+        );
+
+        bnbBalance.innerText =
+            "—";
+
+    }
+
+}
+
+
+/* =========================================================
+   PANCAKESWAP ROUTER ABI
+========================================================= */
+
+const ROUTER_ABI = [
+
+    "function WETH() external pure returns (address)",
+
+    "function getAmountsOut(uint256 amountIn, address[] calldata path) external view returns (uint256[] memory amounts)",
+
+    "function swapExactETHForTokens(uint256 amountOutMin, address[] calldata path, address to, uint256 deadline) external payable returns (uint256[] memory amounts)"
+
+];
+
+
+/* =========================================================
+   UPDATE QUOTE
+========================================================= */
+
+async function updateQuote() {
+
+    const value =
+        payInput.value.trim();
+
+
+    if (!value) {
+
+        receiveInput.value =
+            "";
+
+        return;
+
+    }
+
+
+    let amount;
+
+    try {
+
+        amount =
+            ethers.parseEther(
+                value
+            );
+
+    } catch {
+
+        receiveInput.value =
+            "";
+
+        return;
+
+    }
 
 
     if (
-      currentChain.toLowerCase() ===
-      WEB3SWAP.chainId
+        amount <= 0n
     ) {
 
-      return true;
+        receiveInput.value =
+            "";
+
+        return;
 
     }
 
 
     try {
 
-      await window.ethereum.request({
+        if (!provider) {
 
-        method:
-          "wallet_switchEthereumChain",
+            return;
 
-        params: [
-          {
-            chainId:
-              WEB3SWAP.chainId
-          }
-        ]
+        }
 
-      });
 
-    } catch (switchError) {
+        const router =
+            new ethers.Contract(
 
-      if (switchError.code === 4902) {
+                CONFIG.ROUTER,
 
-        await window.ethereum.request({
+                ROUTER_ABI,
 
-          method:
-            "wallet_addEthereumChain",
+                provider
 
-          params: [
-            {
-              chainId:
-                WEB3SWAP.chainId,
+            );
 
-              chainName:
-                "BNB Smart Chain",
 
-              nativeCurrency: {
-                name: "BNB",
-                symbol: "BNB",
-                decimals: 18
-              },
+        const path = [
 
-              rpcUrls: [
-                WEB3SWAP.rpcUrl
-              ],
+            CONFIG.WBNB,
 
-              blockExplorerUrls: [
-                WEB3SWAP.explorer
-              ]
+            CONFIG.USDT
+
+        ];
+
+
+        const amounts =
+            await router.getAmountsOut(
+                amount,
+                path
+            );
+
+
+        const output =
+            amounts[
+                amounts.length - 1
+            ];
+
+
+        const formatted =
+            ethers.formatUnits(
+                output,
+                CONFIG.USDT_DECIMALS
+            );
+
+
+        receiveInput.value =
+            Number(formatted)
+                .toFixed(2);
+
+
+        updateRateDisplay(
+            Number(formatted) /
+            Number(value)
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Quote error:",
+            error
+        );
+
+
+        receiveInput.value =
+            "";
+
+
+        showMessage(
+            "تعذر الحصول على سعر حالي من PancakeSwap. قد تكون السيولة أو الاتصال بالشبكة غير متاح حاليًا.",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   UPDATE DISPLAYED RATE
+========================================================= */
+
+function updateRateDisplay(rate) {
+
+    const rows =
+        document.querySelectorAll(
+            ".details-row"
+        );
+
+
+    rows.forEach(
+        function (row) {
+
+            const text =
+                row.innerText;
+
+            if (
+                text.includes(
+                    "سعر الصرف"
+                )
+            ) {
+
+                const valueElement =
+                    row.querySelector(
+                        ".val"
+                    );
+
+
+                if (valueElement) {
+
+                    valueElement.innerText =
+                        "1 BNB ≈ " +
+                        rate.toFixed(2) +
+                        " USDT";
+
+                }
 
             }
-          ]
-
-        });
-
-      } else {
-
-        throw switchError;
-
-      }
-
-    }
-
-    return true;
-
-  } catch (error) {
-
-    console.error(
-      "BSC switch error:",
-      error
-    );
-
-    showToast(
-      "Please switch your wallet to BNB Smart Chain."
-    );
-
-    return false;
-
-  }
-
-}
-
-
-/* =========================================================
-   Connect wallet
-   ========================================================= */
-
-async function connectWallet() {
-
-  if (!window.ethereum) {
-
-    showToast(
-      "No Web3 wallet detected. Open Web3Swap inside MetaMask or another EVM wallet."
-    );
-
-    return;
-
-  }
-
-
-  try {
-
-    const accounts =
-      await window.ethereum.request({
-
-        method:
-          "eth_requestAccounts"
-
-      });
-
-
-    if (
-      !accounts ||
-      !accounts.length
-    ) {
-
-      showToast(
-        "No wallet account was selected."
-      );
-
-      return;
-
-    }
-
-
-    const onBSC =
-      await switchToBSC();
-
-
-    if (!onBSC) {
-      return;
-    }
-
-
-    account =
-      accounts[0];
-
-    connected =
-      true;
-
-
-    $("connectWallet").textContent =
-      shortAddress(account);
-
-
-    $("swapBtn").textContent =
-      "Enter amount";
-
-
-    $("walletStatus").textContent =
-      `Connected: ${shortAddress(account)}`;
-
-
-    await refreshBalances();
-
-    await updateQuote();
-
-
-    showToast(
-      "Wallet connected to BNB Smart Chain."
-    );
-
-  } catch (error) {
-
-    console.error(
-      "Wallet connection error:",
-      error
-    );
-
-    showToast(
-      "Wallet connection was cancelled or failed."
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   RPC
-   ========================================================= */
-
-async function rpcCall(
-  method,
-  params = []
-) {
-
-  const response =
-    await fetch(
-      WEB3SWAP.rpcUrl,
-      {
-
-        method: "POST",
-
-        headers: {
-          "Content-Type":
-            "application/json"
-        },
-
-        body: JSON.stringify({
-
-          jsonrpc: "2.0",
-
-          id: Date.now(),
-
-          method,
-
-          params
-
-        })
-
-      }
-    );
-
-
-  if (!response.ok) {
-
-    throw new Error(
-      `RPC HTTP ${response.status}`
-    );
-
-  }
-
-
-  const data =
-    await response.json();
-
-
-  if (data.error) {
-
-    throw new Error(
-      data.error.message ||
-      "RPC error"
-    );
-
-  }
-
-
-  return data.result;
-
-}
-
-
-/* =========================================================
-   ABI helpers
-   ========================================================= */
-
-function encodeAddress(address) {
-
-  return address
-    .toLowerCase()
-    .replace(/^0x/, "")
-    .padStart(64, "0");
-
-}
-
-
-function encodeBalanceOf(address) {
-
-  return (
-    "0x70a08231" +
-    encodeAddress(address)
-  );
-
-}
-
-
-function encodeGetReserves() {
-
-  return "0x0902f1ac";
-
-}
-
-
-function encodeToken0() {
-
-  return "0x0dfe1681";
-
-}
-
-
-function encodeToken1() {
-
-  return "0xd21220a7";
-
-}
-
-
-/* =========================================================
-   Units
-   ========================================================= */
-
-function formatUnits(
-  value,
-  decimals,
-  maxDecimals = 6
-) {
-
-  const negative =
-    value < 0n;
-
-  const abs =
-    negative
-      ? -value
-      : value;
-
-
-  const base =
-    10n ** BigInt(decimals);
-
-
-  const whole =
-    abs / base;
-
-
-  const fraction =
-    abs % base;
-
-
-  if (fraction === 0n) {
-
-    return `${
-      negative ? "-" : ""
-    }${whole}`;
-
-  }
-
-
-  let fractionText =
-    fraction
-      .toString()
-      .padStart(
-        decimals,
-        "0"
-      );
-
-
-  fractionText =
-    fractionText
-      .slice(
-        0,
-        maxDecimals
-      )
-      .replace(
-        /0+$/,
-        ""
-      );
-
-
-  return `${
-    negative ? "-" : ""
-  }${whole}.${fractionText}`;
-
-}
-
-
-function parseUnits(
-  value,
-  decimals
-) {
-
-  const cleaned =
-    String(value)
-      .trim()
-      .replace(/,/g, "");
-
-
-  if (
-    !/^\d*\.?\d+$/.test(
-      cleaned
-    )
-  ) {
-
-    throw new Error(
-      "Invalid amount"
-    );
-
-  }
-
-
-  const [
-    whole = "0",
-    fraction = ""
-  ] =
-    cleaned.split(".");
-
-
-  const padded =
-    (
-      fraction +
-      "0".repeat(decimals)
-    )
-      .slice(
-        0,
-        decimals
-      );
-
-
-  return (
-    BigInt(
-      whole || "0"
-    ) *
-      (
-        10n **
-        BigInt(decimals)
-      )
-  ) +
-    BigInt(
-      padded || "0"
-    );
-
-}
-
-
-/* =========================================================
-   Balances
-   ========================================================= */
-
-async function getNativeBalance(
-  address
-) {
-
-  const hex =
-    await rpcCall(
-      "eth_getBalance",
-      [
-        address,
-        "latest"
-      ]
-    );
-
-  return BigInt(hex);
-
-}
-
-
-async function getERC20Balance(
-  tokenAddress,
-  address
-) {
-
-  const data =
-    await rpcCall(
-      "eth_call",
-      [
-        {
-          to:
-            tokenAddress,
-
-          data:
-            encodeBalanceOf(
-              address
-            )
-        },
-
-        "latest"
-      ]
-    );
-
-
-  return BigInt(data);
-
-}
-
-
-async function refreshBalances() {
-
-  if (
-    !connected ||
-    !account
-  ) {
-
-    return;
-
-  }
-
-
-  try {
-
-    if (
-      paySymbol === "BNB"
-    ) {
-
-      const balance =
-        await getNativeBalance(
-          account
-        );
-
-
-      $("payBalance").textContent =
-        `Balance: ${
-          formatUnits(
-            balance,
-            18,
-            5
-          )
-        } BNB`;
-
-    }
-
-    else if (
-      tokens[paySymbol] &&
-      tokens[paySymbol].address
-    ) {
-
-      const balance =
-        await getERC20Balance(
-          tokens[paySymbol].address,
-          account
-        );
-
-
-      $("payBalance").textContent =
-        `Balance: ${
-          formatUnits(
-            balance,
-            tokens[paySymbol].decimals,
-            5
-          )
-        } ${paySymbol}`;
-
-    }
-
-
-    if (
-      receiveSymbol === "BNB"
-    ) {
-
-      const balance =
-        await getNativeBalance(
-          account
-        );
-
-
-      $("receiveBalance").textContent =
-        `Balance: ${
-          formatUnits(
-            balance,
-            18,
-            5
-          )
-        } BNB`;
-
-    }
-
-    else if (
-      tokens[receiveSymbol] &&
-      tokens[receiveSymbol].address
-    ) {
-
-      const balance =
-        await getERC20Balance(
-          tokens[receiveSymbol].address,
-          account
-        );
-
-
-      $("receiveBalance").textContent =
-        `Balance: ${
-          formatUnits(
-            balance,
-            tokens[receiveSymbol].decimals,
-            5
-          )
-        } ${receiveSymbol}`;
-
-    }
-
-  } catch (error) {
-
-    console.error(
-      "Balance error:",
-      error
-    );
-
-    $("payBalance").textContent =
-      "Balance: unavailable";
-
-    $("receiveBalance").textContent =
-      "Balance: unavailable";
-
-  }
-
-}
-
-
-/* =========================================================
-   PancakeSwap V2 reserves
-   ========================================================= */
-
-async function getPairReserves() {
-
-  const [
-    reservesHex,
-    token0,
-    token1
-  ] =
-    await Promise.all([
-
-      rpcCall(
-        "eth_call",
-        [
-          {
-            to:
-              WEB3SWAP.pair,
-
-            data:
-              encodeGetReserves()
-          },
-
-          "latest"
-        ]
-      ),
-
-      rpcCall(
-        "eth_call",
-        [
-          {
-            to:
-              WEB3SWAP.pair,
-
-            data:
-              encodeToken0()
-          },
-
-          "latest"
-        ]
-      ),
-
-      rpcCall(
-        "eth_call",
-        [
-          {
-            to:
-              WEB3SWAP.pair,
-
-            data:
-              encodeToken1()
-          },
-
-          "latest"
-        ]
-      )
-
-    ]);
-
-
-  const reserve0 =
-    BigInt(
-      "0x" +
-      reservesHex.slice(
-        2,
-        66
-      )
-    );
-
-
-  const reserve1 =
-    BigInt(
-      "0x" +
-      reservesHex.slice(
-        66,
-        130
-      )
-    );
-
-
-  return {
-
-    reserve0,
-
-    reserve1,
-
-    token0:
-      "0x" +
-      token0.slice(-40),
-
-    token1:
-      "0x" +
-      token1.slice(-40)
-
-  };
-
-}
-
-
-/* =========================================================
-   Amount out calculation
-   ========================================================= */
-
-function calculateAmountOut(
-  amountIn,
-  reserveIn,
-  reserveOut
-) {
-
-  if (
-    amountIn <= 0n
-  ) {
-
-    return 0n;
-
-  }
-
-
-  if (
-    reserveIn <= 0n ||
-    reserveOut <= 0n
-  ) {
-
-    return 0n;
-
-  }
-
-
-  const amountInWithFee =
-    amountIn *
-    WEB3SWAP.feeNumerator;
-
-
-  return (
-    amountInWithFee *
-    reserveOut
-  ) /
-  (
-    reserveIn *
-    WEB3SWAP.feeDenominator +
-    amountInWithFee
-  );
-
-}
-
-
-/* =========================================================
-   BNB -> USDT quote
-   ========================================================= */
-
-async function getBNBToUSDTQuote(
-  amountInBNB
-) {
-
-  const amountIn =
-    parseUnits(
-      amountInBNB,
-      18
-    );
-
-
-  const pair =
-    await getPairReserves();
-
-
-  const token0 =
-    pair.token0.toLowerCase();
-
-
-  const token1 =
-    pair.token1.toLowerCase();
-
-
-  const wbnb =
-    WEB3SWAP.wbnb.toLowerCase();
-
-
-  const usdt =
-    WEB3SWAP.usdt.toLowerCase();
-
-
-  let reserveWBNB;
-
-  let reserveUSDT;
-
-
-  if (
-    token0 === wbnb &&
-    token1 === usdt
-  ) {
-
-    reserveWBNB =
-      pair.reserve0;
-
-    reserveUSDT =
-      pair.reserve1;
-
-  }
-
-  else if (
-    token0 === usdt &&
-    token1 === wbnb
-  ) {
-
-    reserveUSDT =
-      pair.reserve0;
-
-    reserveWBNB =
-      pair.reserve1;
-
-  }
-
-  else {
-
-    throw new Error(
-      "Unexpected WBNB/USDT pair tokens."
-    );
-
-  }
-
-
-  const amountOut =
-    calculateAmountOut(
-      amountIn,
-      reserveWBNB,
-      reserveUSDT
-    );
-
-
-  return {
-
-    amountIn,
-
-    amountOut,
-
-    reserveWBNB,
-
-    reserveUSDT
-
-  };
-
-}
-
-
-/* =========================================================
-   Quote
-   ========================================================= */
-
-async function updateQuote() {
-
-  clearTimeout(
-    quoteTimer
-  );
-
-
-  quoteTimer =
-    setTimeout(
-      async () => {
-
-        const amountText =
-          $("payAmount")
-            .value
-            .trim();
-
-
-        if (!connected) {
-
-          $("rateText").textContent =
-            "Connect wallet to get a real quote";
-
-          $("receiveAmount").value =
-            "";
-
-          $("swapBtn").textContent =
-            "Connect Wallet";
-
-          return;
 
         }
-
-
-        if (
-          !amountText ||
-          Number(amountText) <= 0
-        ) {
-
-          $("rateText").textContent =
-            "Enter an amount to get a live quote";
-
-          $("receiveAmount").value =
-            "";
-
-          $("swapBtn").textContent =
-            "Enter amount";
-
-          return;
-
-        }
-
-
-        if (
-          paySymbol === "BNB" &&
-          receiveSymbol === "USDT"
-        ) {
-
-          try {
-
-            $("rateText").textContent =
-              "Fetching live BNB/USDT price…";
-
-
-            $("receiveAmount").value =
-              "";
-
-
-            $("swapBtn").disabled =
-              true;
-
-
-            $("swapBtn").textContent =
-              "Getting quote…";
-
-
-            const quote =
-              await getBNBToUSDTQuote(
-                amountText
-              );
-
-
-            const output =
-              formatUnits(
-                quote.amountOut,
-                18,
-                6
-              );
-
-
-            const inputNumber =
-              Number(
-                amountText
-              );
-
-
-            const outputNumber =
-              Number(
-                output
-              );
-
-
-            const rate =
-              inputNumber > 0
-                ? outputNumber /
-                  inputNumber
-                : 0;
-
-
-            $("receiveAmount").value =
-              output;
-
-
-            $("rateText").textContent =
-              `1 BNB ≈ ${
-                rate.toFixed(4)
-              } USDT`;
-
-
-            $("swapBtn").textContent =
-              "Swap";
-
-
-            $("swapBtn").disabled =
-              false;
-
-
-            refreshBalances();
-
-
-          } catch (error) {
-
-            console.error(
-              "Quote error:",
-              error
-            );
-
-
-            $("receiveAmount").value =
-              "";
-
-
-            $("rateText").textContent =
-              "Live quote unavailable";
-
-
-            $("swapBtn").textContent =
-              "Try again";
-
-
-            $("swapBtn").disabled =
-              false;
-
-
-            showToast(
-              "Could not read the live BNB/USDT pool."
-            );
-
-          }
-
-
-          return;
-
-        }
-
-
-        $("receiveAmount").value =
-          "";
-
-
-        $("rateText").textContent =
-          "Live routing for this pair will be added next.";
-
-
-        $("swapBtn").textContent =
-          "Swap";
-
-
-        $("swapBtn").disabled =
-          false;
-
-      },
-
-      250
     );
 
 }
 
 
 /* =========================================================
-   Swap
-   ========================================================= */
+   WALLET CONNECTION
+========================================================= */
 
-async function handleSwap() {
+async function handleWalletConnection() {
 
-  if (!connected) {
+    if (!walletAvailable()) {
 
-    await connectWallet();
-
-    return;
-
-  }
-
-
-  const amount =
-    $("payAmount")
-      .value
-      .trim();
-
-
-  if (
-    !amount ||
-    Number(amount) <= 0
-  ) {
-
-    showToast(
-      "Enter an amount first."
-    );
-
-    return;
-
-  }
-
-
-  showToast(
-    "Live quote is working. Real swap execution will be added next."
-  );
-
-}
-
-
-/* =========================================================
-   Flip
-   ========================================================= */
-
-function flipTokens() {
-
-  [
-    paySymbol,
-    receiveSymbol
-  ] =
-  [
-    receiveSymbol,
-    paySymbol
-  ];
-
-
-  renderTokenButton(
-    "payToken",
-    paySymbol
-  );
-
-
-  renderTokenButton(
-    "receiveToken",
-    receiveSymbol
-  );
-
-
-  if (connected) {
-
-    refreshBalances();
-
-  }
-
-
-  updateQuote();
-
-}
-
-
-/* =========================================================
-   Wallet events
-   ========================================================= */
-
-function setupWalletEvents() {
-
-  if (!window.ethereum) {
-
-    return;
-
-  }
-
-
-  window.ethereum.on(
-    "accountsChanged",
-    async (accounts) => {
-
-      if (
-        !accounts ||
-        !accounts.length
-      ) {
-
-        connected =
-          false;
-
-        account =
-          null;
-
-
-        $("connectWallet").textContent =
-          "Connect Wallet";
-
-
-        $("swapBtn").textContent =
-          "Connect Wallet";
-
-
-        $("walletStatus").textContent =
-          "Wallet not connected";
-
-
-        $("payBalance").textContent =
-          "Balance: —";
-
-
-        $("receiveBalance").textContent =
-          "Balance: —";
-
-
-        $("receiveAmount").value =
-          "";
-
-
-        $("rateText").textContent =
-          "Connect wallet to get a real quote";
-
+        showMessage(
+            "لم يتم العثور على محفظة Web3. افتح الموقع من متصفح المحفظة مثل MetaMask أو Trust Wallet.",
+            "error"
+        );
 
         return;
 
-      }
+    }
 
 
-      account =
-        accounts[0];
+    try {
 
-      connected =
-        true;
+        connectBtn.disabled =
+            true;
 
-
-      $("connectWallet").textContent =
-        shortAddress(account);
+        connectBtn.innerText =
+            "جارٍ الاتصال...";
 
 
-      $("walletStatus").textContent =
-        `Connected: ${shortAddress(account)}`;
+        await loadEthers();
 
 
-      await refreshBalances();
+        /*
+         * Request account
+         */
 
-      updateQuote();
+        const accounts =
+            await window.ethereum.request({
+
+                method:
+                    "eth_requestAccounts"
+
+            });
+
+
+        if (
+            !accounts ||
+            accounts.length === 0
+        ) {
+
+            throw new Error(
+                "لم يتم اختيار حساب."
+            );
+
+        }
+
+
+        /*
+         * Check network
+         */
+
+        let chainId =
+            await getChainId();
+
+
+        if (
+            chainId !==
+            CONFIG.CHAIN_ID
+        ) {
+
+            showMessage(
+                "المحفظة ليست على BNB Smart Chain. سيتم طلب التحويل إلى BNB Mainnet.",
+                "warning"
+            );
+
+
+            await switchToBNB();
+
+
+            chainId =
+                await getChainId();
+
+
+            if (
+                chainId !==
+                CONFIG.CHAIN_ID
+            ) {
+
+                throw new Error(
+                    "يجب استخدام BNB Smart Chain Mainnet."
+                );
+
+            }
+
+        }
+
+
+        /*
+         * Provider
+         */
+
+        await createProvider();
+
+
+        /*
+         * UI
+         */
+
+        connectBtn.innerText =
+            shortAddress(
+                userAddress
+            );
+
+
+        connectBtn.disabled =
+            false;
+
+
+        actionBtn.innerText =
+            "Swap";
+
+
+        actionBtn.disabled =
+            false;
+
+
+        bnbBalance.innerText =
+            "جارٍ التحميل...";
+
+
+        await updateBNBBalance();
+
+
+        await updateQuote();
+
+
+        showMessage(
+            "تم ربط المحفظة على BNB Smart Chain Mainnet بنجاح.",
+            "success"
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Wallet connection error:",
+            error
+        );
+
+
+        connectBtn.disabled =
+            false;
+
+        connectBtn.innerText =
+            "ربط المحفظة";
+
+
+        if (
+            error &&
+            error.code === 4001
+        ) {
+
+            showMessage(
+                "تم رفض اتصال المحفظة.",
+                "error"
+            );
+
+        } else {
+
+            showMessage(
+                error.message ||
+                "حدث خطأ أثناء ربط المحفظة.",
+                "error"
+            );
+
+        }
 
     }
-  );
-
-
-  window.ethereum.on(
-    "chainChanged",
-    () => {
-
-      window.location.reload();
-
-    }
-  );
 
 }
 
 
 /* =========================================================
-   Events
-   ========================================================= */
+   EXECUTE REAL SWAP
+========================================================= */
 
-if ($("connectWallet")) {
+async function executeSwap() {
 
-  $("connectWallet").onclick =
-    connectWallet;
+    if (!walletAvailable()) {
+
+        await handleWalletConnection();
+
+        return;
+
+    }
+
+
+    if (!signer) {
+
+        await handleWalletConnection();
+
+        if (!signer) {
+
+            return;
+
+        }
+
+    }
+
+
+    try {
+
+        /*
+         * Make absolutely sure
+         * we are on BNB Mainnet
+         */
+
+        const chainId =
+            await getChainId();
+
+
+        if (
+            chainId !==
+            CONFIG.CHAIN_ID
+        ) {
+
+            await switchToBNB();
+
+            const newChainId =
+                await getChainId();
+
+
+            if (
+                newChainId !==
+                CONFIG.CHAIN_ID
+            ) {
+
+                throw new Error(
+                    "يرجى تحويل المحفظة إلى BNB Smart Chain Mainnet."
+                );
+
+            }
+
+
+            await createProvider();
+
+        }
+
+
+        /*
+         * Input
+         */
+
+        const input =
+            payInput.value.trim();
+
+
+        if (!input) {
+
+            throw new Error(
+                "أدخل كمية BNB أولًا."
+            );
+
+        }
+
+
+        const amountIn =
+            ethers.parseEther(
+                input
+            );
+
+
+        if (
+            amountIn <= 0n
+        ) {
+
+            throw new Error(
+                "يجب أن تكون كمية BNB أكبر من صفر."
+            );
+
+        }
+
+
+        /*
+         * Current wallet balance
+         */
+
+        const balance =
+            await provider.getBalance(
+                userAddress
+            );
+
+
+        if (
+            amountIn >= balance
+        ) {
+
+            throw new Error(
+                "رصيد BNB غير كافٍ. اترك كمية كافية لدفع رسوم الشبكة."
+            );
+
+        }
+
+
+        /*
+         * Router
+         */
+
+        const router =
+            new ethers.Contract(
+
+                CONFIG.ROUTER,
+
+                ROUTER_ABI,
+
+                signer
+
+            );
+
+
+        /*
+         * Path:
+         *
+         * BNB
+         * ↓
+         * WBNB
+         * ↓
+         * USDT
+         */
+
+        const path = [
+
+            CONFIG.WBNB,
+
+            CONFIG.USDT
+
+        ];
+
+
+        /*
+         * Get fresh quote
+         */
+
+        showMessage(
+            "جاري الحصول على السعر الحالي...",
+            "info"
+        );
+
+
+        const amounts =
+            await router.getAmountsOut(
+
+                amountIn,
+
+                path
+
+            );
+
+
+        const expectedOut =
+            amounts[
+                amounts.length - 1
+            ];
+
+
+        /*
+         * 0.50% slippage
+         */
+
+        const slippageNumerator =
+            995n;
+
+        const slippageDenominator =
+            1000n;
+
+
+        const amountOutMin =
+            (
+                expectedOut *
+                slippageNumerator
+            ) /
+            slippageDenominator;
+
+
+        /*
+         * Deadline
+         */
+
+        const deadline =
+            Math.floor(
+                Date.now() / 1000
+            ) +
+            (
+                CONFIG.DEADLINE_MINUTES *
+                60
+            );
+
+
+        /*
+         * Show confirmation
+         */
+
+        const expectedFormatted =
+            ethers.formatUnits(
+                expectedOut,
+                CONFIG.USDT_DECIMALS
+            );
+
+
+        const minimumFormatted =
+            ethers.formatUnits(
+                amountOutMin,
+                CONFIG.USDT_DECIMALS
+            );
+
+
+        const confirmation =
+            confirm(
+
+                "تأكيد Swap\n\n" +
+
+                "المبلغ: " +
+                input +
+                " BNB\n\n" +
+
+                "المتوقع تقريبًا: " +
+                Number(
+                    expectedFormatted
+                ).toFixed(2) +
+                " USDT\n\n" +
+
+                "الحد الأدنى بعد الانزلاق: " +
+                Number(
+                    minimumFormatted
+                ).toFixed(2) +
+                " USDT\n\n" +
+
+                "Slippage: 0.50%\n\n" +
+
+                "سيتم فتح محفظتك لتأكيد المعاملة."
+
+            );
+
+
+        if (!confirmation) {
+
+            showMessage(
+                "تم إلغاء العملية.",
+                "warning"
+            );
+
+            return;
+
+        }
+
+
+        /*
+         * Disable button
+         */
+
+        actionBtn.disabled =
+            true;
+
+        actionBtn.innerText =
+            "جارٍ تنفيذ Swap...";
+
+
+        /*
+         * REAL TRANSACTION
+         */
+
+        const tx =
+            await router.swapExactETHForTokens(
+
+                amountOutMin,
+
+                path,
+
+                userAddress,
+
+                deadline,
+
+                {
+
+                    value:
+                        amountIn
+
+                }
+
+            );
+
+
+        showMessage(
+            "تم إرسال المعاملة إلى الشبكة. انتظر التأكيد...",
+            "info"
+        );
+
+
+        /*
+         * Wait for confirmation
+         */
+
+        const receipt =
+            await tx.wait();
+
+
+        /*
+         * Success
+         */
+
+        const txUrl =
+            CONFIG.EXPLORER +
+            receipt.hash;
+
+
+        showMessage(
+
+            "تم تنفيذ Swap بنجاح!\n\n" +
+            "المعاملة:\n" +
+            tx.hash +
+            "\n\n" +
+            "يمكنك فتحها على BscScan.",
+
+            "success",
+
+            txUrl
+
+        );
+
+
+        /*
+         * Refresh
+         */
+
+        await updateBNBBalance();
+
+        await updateQuote();
+
+
+    } catch (error) {
+
+        console.error(
+            "Swap error:",
+            error
+        );
+
+
+        if (
+            error &&
+            error.code === 4001
+        ) {
+
+            showMessage(
+                "تم رفض المعاملة من المحفظة.",
+                "warning"
+            );
+
+        } else {
+
+            let message =
+                "فشل تنفيذ Swap.";
+
+
+            if (
+                error &&
+                error.reason
+            ) {
+
+                message =
+                    error.reason;
+
+            } else if (
+                error &&
+                error.shortMessage
+            ) {
+
+                message =
+                    error.shortMessage;
+
+            } else if (
+                error &&
+                error.message
+            ) {
+
+                message =
+                    error.message;
+
+            }
+
+
+            showMessage(
+                message,
+                "error"
+            );
+
+        }
+
+    } finally {
+
+        actionBtn.disabled =
+            false;
+
+        actionBtn.innerText =
+            "Swap";
+
+    }
 
 }
 
 
-if ($("swapBtn")) {
+/* =========================================================
+   MESSAGE BOX
+========================================================= */
 
-  $("swapBtn").onclick =
-    handleSwap;
+function showMessage(
+    message,
+    type,
+    link
+) {
+
+    let box =
+        document.getElementById(
+            "web3swapMessage"
+        );
+
+
+    if (!box) {
+
+        box =
+            document.createElement(
+                "div"
+            );
+
+
+        box.id =
+            "web3swapMessage";
+
+
+        box.style.cssText = `
+
+            position: fixed;
+            left: 15px;
+            right: 15px;
+            bottom: 20px;
+            z-index: 99999;
+
+            padding: 14px 16px;
+
+            border-radius: 12px;
+
+            background: rgba(5,11,24,0.96);
+
+            border: 1px solid rgba(96,165,250,0.35);
+
+            color: white;
+
+            font-size: 14px;
+
+            line-height: 1.7;
+
+            text-align: center;
+
+            box-shadow: 0 15px 40px rgba(0,0,0,0.45);
+
+            backdrop-filter: blur(15px);
+
+        `;
+
+
+        document.body.appendChild(
+            box
+        );
+
+    }
+
+
+    box.innerHTML =
+        message.replace(
+            /\n/g,
+            "<br>"
+        );
+
+
+    if (link) {
+
+        box.innerHTML +=
+            `<br><br>
+            <a
+                href="${link}"
+                target="_blank"
+                rel="noopener noreferrer"
+                style="
+                    color:#60a5fa;
+                    font-weight:700;
+                "
+            >
+                فتح المعاملة على BscScan
+            </a>`;
+
+    }
+
+
+    box.style.display =
+        "block";
+
+
+    clearTimeout(
+        box._timer
+    );
+
+
+    box._timer =
+        setTimeout(
+            function () {
+
+                box.style.display =
+                    "none";
+
+            },
+            8000
+        );
 
 }
 
 
-if ($("payAmount")) {
+/* =========================================================
+   INPUT EVENT
+========================================================= */
 
-  $("payAmount").addEventListener(
+payInput.addEventListener(
     "input",
-    updateQuote
-  );
+    async function () {
 
-}
+        if (
+            window.ethers &&
+            provider
+        ) {
 
+            await updateQuote();
 
-if ($("payToken")) {
-
-  $("payToken").onclick =
-    () => openTokenModal("pay");
-
-}
-
-
-if ($("receiveToken")) {
-
-  $("receiveToken").onclick =
-    () => openTokenModal("receive");
-
-}
-
-
-if ($("flipBtn")) {
-
-  $("flipBtn").onclick =
-    flipTokens;
-
-}
-
-
-if ($("closeModal")) {
-
-  $("closeModal").onclick =
-    () => {
-
-      $("tokenModal")
-        .classList
-        .add("hidden");
-
-    };
-
-}
-
-
-if ($("tokenModal")) {
-
-  $("tokenModal").addEventListener(
-    "click",
-    (event) => {
-
-      if (
-        event.target.id ===
-        "tokenModal"
-      ) {
-
-        $("tokenModal")
-          .classList
-          .add("hidden");
-
-      }
+        }
 
     }
-  );
-
-}
+);
 
 
-if ($("slippageBtn")) {
+/* =========================================================
+   CONNECT BUTTON
+========================================================= */
 
-  $("slippageBtn").onclick =
-    () => {
-
-      showToast(
-        "Current slippage setting: 0.50%"
-      );
-
-    };
-
-}
+connectBtn.addEventListener(
+    "click",
+    handleWalletConnection
+);
 
 
-if ($("settingsBtn")) {
+/* =========================================================
+   SWAP BUTTON
+========================================================= */
 
-  $("settingsBtn").onclick =
-    () => {
+actionBtn.addEventListener(
+    "click",
+    executeSwap
+);
 
-      showToast(
-        "Advanced swap settings will be added later."
-      );
 
-    };
+/* =========================================================
+   REVERSE BUTTON
+========================================================= */
+
+reverseSwapBtn.addEventListener(
+    "click",
+    function () {
+
+        this.style.transform =
+            "rotate(180deg)";
+
+
+        setTimeout(
+            () => {
+
+                this.style.transform =
+                    "rotate(0deg)";
+
+            },
+            300
+        );
+
+    }
+);
+
+
+/* =========================================================
+   ACCOUNT CHANGED
+========================================================= */
+
+if (
+    typeof window.ethereum !==
+    "undefined"
+) {
+
+    window.ethereum.on(
+        "accountsChanged",
+        async function (
+            accounts
+        ) {
+
+            if (
+                !accounts ||
+                accounts.length === 0
+            ) {
+
+                provider = null;
+
+                signer = null;
+
+                userAddress = null;
+
+
+                connectBtn.innerText =
+                    "ربط المحفظة";
+
+
+                actionBtn.innerText =
+                    "ربط المحفظة للبدء";
+
+
+                bnbBalance.innerText =
+                    "—";
+
+
+                receiveInput.value =
+                    "";
+
+
+                return;
+
+            }
+
+
+            try {
+
+                await createProvider();
+
+                connectBtn.innerText =
+                    shortAddress(
+                        userAddress
+                    );
+
+                await updateBNBBalance();
+
+                await updateQuote();
+
+            } catch (error) {
+
+                console.error(
+                    error
+                );
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       CHAIN CHANGED
+    ===================================================== */
+
+    window.ethereum.on(
+        "chainChanged",
+        async function () {
+
+            provider = null;
+
+            signer = null;
+
+
+            try {
+
+                const chainId =
+                    await getChainId();
+
+
+                if (
+                    chainId !==
+                    CONFIG.CHAIN_ID
+                ) {
+
+                    showMessage(
+                        "المحفظة ليست على BNB Smart Chain Mainnet.",
+                        "warning"
+                    );
+
+
+                    actionBtn.disabled =
+                        true;
+
+
+                    return;
+
+                }
+
+
+                await createProvider();
+
+
+                actionBtn.disabled =
+                    false;
+
+
+                connectBtn.innerText =
+                    shortAddress(
+                        userAddress
+                    );
+
+
+                await updateBNBBalance();
+
+                await updateQuote();
+
+            } catch (error) {
+
+                console.error(
+                    error
+                );
+
+            }
+
+        }
+    );
 
 }
 
 
 /* =========================================================
-   Start
-   ========================================================= */
+   INITIAL STATE
+========================================================= */
 
-renderTokenButton(
-  "payToken",
-  paySymbol
+actionBtn.disabled =
+    false;
+
+
+console.log(
+    "Web3Swap initialized."
 );
 
 
-renderTokenButton(
-  "receiveToken",
-  receiveSymbol
+console.log(
+    "Network: BNB Smart Chain Mainnet"
 );
 
 
-setupWalletEvents();
+console.log(
+    "Chain ID:",
+    CONFIG.CHAIN_ID
+);
+
+
+console.log(
+    "PancakeSwap Router:",
+    CONFIG.ROUTER
+);
+
+
+console.log(
+    "USDT:",
+    CONFIG.USDT
+);
