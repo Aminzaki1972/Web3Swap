@@ -20,7 +20,6 @@
   <style>
 
     :root {
-
       --bg-main: #050b18;
       --bg-secondary: #081226;
 
@@ -43,16 +42,12 @@
       --success: #22c55e;
       --danger: #ef4444;
       --warning: #f59e0b;
-
     }
 
 
     * {
-
       box-sizing: border-box;
-
       margin: 0;
-
       padding: 0;
 
       font-family:
@@ -63,19 +58,15 @@
         Roboto,
         Arial,
         sans-serif;
-
     }
 
 
     html {
-
       scroll-behavior: smooth;
-
     }
 
 
     body {
-
       min-height: 100vh;
 
       color: var(--text-main);
@@ -104,11 +95,9 @@
         );
 
       display: flex;
-
       flex-direction: column;
 
       overflow-x: hidden;
-
     }
 
 
@@ -117,23 +106,17 @@
     ========================= */
 
     header {
-
       width: 100%;
-
       min-height: 72px;
 
       display: flex;
-
       align-items: center;
-
       justify-content: space-between;
 
       padding: 14px 6%;
 
       position: sticky;
-
       top: 0;
-
       z-index: 1000;
 
       background: rgba(3, 7, 18, 0.78);
@@ -142,50 +125,38 @@
         1px solid rgba(59, 130, 246, 0.18);
 
       backdrop-filter: blur(18px);
-
       -webkit-backdrop-filter: blur(18px);
-
     }
 
 
     .logo {
-
       color: #ffffff;
 
       text-decoration: none;
 
       display: flex;
-
       align-items: center;
 
       gap: 5px;
 
       font-size: 1.55rem;
-
       font-weight: 800;
 
       letter-spacing: -0.5px;
-
     }
 
 
     .logo span {
-
       color: var(--accent);
-
     }
 
 
     .logo-icon {
-
       width: 34px;
-
       height: 34px;
 
       display: flex;
-
       align-items: center;
-
       justify-content: center;
 
       border-radius: 10px;
@@ -203,23 +174,17 @@
 
       box-shadow:
         0 0 20px rgba(37, 99, 235, 0.35);
-
     }
 
 
     nav {
-
       display: flex;
-
       align-items: center;
-
       gap: 28px;
-
     }
 
 
     nav a {
-
       color: var(--text-secondary);
 
       text-decoration: none;
@@ -227,19 +192,15 @@
       font-size: 0.95rem;
 
       transition: 0.25s ease;
-
     }
 
 
     nav a:hover {
-
       color: white;
-
     }
 
 
     .btn-connect {
-
       border:
         1px solid rgba(96, 165, 250, 0.35);
 
@@ -257,7 +218,6 @@
       border-radius: 10px;
 
       font-size: 0.9rem;
-
       font-weight: 700;
 
       cursor: pointer;
@@ -266,17 +226,14 @@
         0 8px 25px rgba(37, 99, 235, 0.25);
 
       transition: 0.25s ease;
-
     }
 
 
     .btn-connect:hover {
-
       transform: translateY(-1px);
 
       box-shadow:
         0 12px 30px rgba(37, 99, 235, 0.4);
-
     }
 
 
@@ -285,36 +242,28 @@
     ========================= */
 
     main {
-
       width: 100%;
-
       flex: 1;
 
       display: flex;
-
       flex-direction: column;
-
       align-items: center;
 
       padding: 70px 20px 80px;
 
       position: relative;
-
     }
 
 
     main::before {
-
       content: "";
 
       position: absolute;
 
       width: 500px;
-
       height: 500px;
 
       top: 100px;
-
       left: 50%;
 
       transform: translateX(-50%);
@@ -326,7 +275,6 @@
       border-radius: 50%;
 
       pointer-events: none;
-
     }
 
 
@@ -335,9 +283,7 @@
     ========================= */
 
     .hero-text {
-
       position: relative;
-
       z-index: 2;
 
       text-align: center;
@@ -345,14 +291,11 @@
       max-width: 800px;
 
       margin-bottom: 38px;
-
     }
 
 
     .hero-badge {
-
       display: inline-flex;
-
       align-items: center;
 
       gap: 8px;
@@ -371,14 +314,11 @@
       font-size: 0.82rem;
 
       margin-bottom: 20px;
-
     }
 
 
     .hero-badge-dot {
-
       width: 7px;
-
       height: 7px;
 
       border-radius: 50%;
@@ -387,12 +327,10 @@
 
       box-shadow:
         0 0 10px rgba(34, 197, 94, 0.8);
-
     }
 
 
     .hero-text h1 {
-
       font-size:
         clamp(2rem, 5vw, 3.4rem);
 
@@ -403,12 +341,10 @@
       font-weight: 800;
 
       letter-spacing: -1px;
-
     }
 
 
     .hero-text h1 span {
-
       background:
         linear-gradient(
           90deg,
@@ -417,16 +353,13 @@
         );
 
       -webkit-background-clip: text;
-
       background-clip: text;
 
       color: transparent;
-
     }
 
 
     .hero-text p {
-
       color: var(--text-secondary);
 
       font-size: 1rem;
@@ -434,7 +367,6 @@
       max-width: 650px;
 
       margin: auto;
-
     }
 
 
@@ -443,13 +375,10 @@
     ========================= */
 
     .swap-container {
-
       position: relative;
-
       z-index: 3;
 
       width: 100%;
-
       max-width: 470px;
 
       padding: 22px;
@@ -471,36 +400,27 @@
         0 0 50px rgba(37, 99, 235, 0.08);
 
       backdrop-filter: blur(20px);
-
       -webkit-backdrop-filter: blur(20px);
-
     }
 
 
     .swap-header {
-
       display: flex;
 
       justify-content: space-between;
-
       align-items: center;
 
       margin-bottom: 18px;
-
     }
 
 
     .swap-header h2 {
-
       font-size: 1.25rem;
-
       font-weight: 750;
-
     }
 
 
     .network-badge {
-
       font-size: 0.72rem;
 
       padding: 5px 9px;
@@ -513,7 +433,6 @@
 
       border:
         1px solid rgba(59, 130, 246, 0.22);
-
     }
 
 
@@ -522,7 +441,6 @@
     ========================= */
 
     .input-box {
-
       padding: 16px;
 
       background:
@@ -534,23 +452,19 @@
       border-radius: 14px;
 
       transition: 0.25s ease;
-
     }
 
 
     .input-box:focus-within {
-
       border-color:
         rgba(59, 130, 246, 0.6);
 
       box-shadow:
         0 0 0 3px rgba(37, 99, 235, 0.08);
-
     }
 
 
     .input-row {
-
       display: flex;
 
       align-items: center;
@@ -558,12 +472,10 @@
       justify-content: space-between;
 
       gap: 12px;
-
     }
 
 
-    .input-box input {
-
+    .input-box input.amount-input {
       width: 65%;
 
       background: transparent;
@@ -577,19 +489,19 @@
       font-size: 1.65rem;
 
       font-weight: 600;
-
     }
 
 
     .input-box input::placeholder {
-
       color: #475569;
-
     }
 
 
-    .token-badge {
+    /* =========================
+       TOKEN BADGE
+    ========================= */
 
+    .token-badge {
       display: flex;
 
       align-items: center;
@@ -614,19 +526,19 @@
 
       font-weight: 700;
 
+      min-width: 92px;
+
+      justify-content: center;
     }
 
 
     .token-icon {
-
       width: 24px;
-
       height: 24px;
 
       display: flex;
 
       align-items: center;
-
       justify-content: center;
 
       border-radius: 50%;
@@ -639,12 +551,159 @@
         );
 
       font-size: 11px;
+    }
 
+
+    /* =========================
+       CONTRACT ADDRESS
+    ========================= */
+
+    .contract-area {
+      margin-top: 13px;
+    }
+
+
+    .contract-label {
+      display: block;
+
+      color: var(--text-secondary);
+
+      font-size: 0.72rem;
+
+      margin-bottom: 6px;
+
+      text-align: right;
+    }
+
+
+    .contract-row {
+      display: flex;
+
+      align-items: center;
+
+      gap: 7px;
+    }
+
+
+    .contract-input {
+      flex: 1;
+
+      min-width: 0;
+
+      padding: 9px 10px;
+
+      border-radius: 9px;
+
+      border:
+        1px solid rgba(59, 130, 246, 0.2);
+
+      background:
+        rgba(5, 15, 31, 0.75);
+
+      color: #dbeafe;
+
+      outline: none;
+
+      font-size: 0.72rem;
+
+      direction: ltr;
+
+      text-align: left;
+
+      transition: 0.25s ease;
+    }
+
+
+    .contract-input:focus {
+      border-color:
+        rgba(56, 189, 248, 0.65);
+
+      box-shadow:
+        0 0 0 2px rgba(56, 189, 248, 0.08);
+    }
+
+
+    .contract-input::placeholder {
+      color: #475569;
+    }
+
+
+    .verify-token-btn {
+      border: none;
+
+      padding: 9px 11px;
+
+      border-radius: 9px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #1d4ed8,
+          #2563eb
+        );
+
+      color: white;
+
+      font-size: 0.7rem;
+
+      font-weight: 700;
+
+      cursor: pointer;
+
+      white-space: nowrap;
+
+      transition: 0.25s ease;
+    }
+
+
+    .verify-token-btn:hover {
+      transform: translateY(-1px);
+
+      box-shadow:
+        0 6px 18px rgba(37, 99, 235, 0.3);
+    }
+
+
+    .token-info {
+      display: none;
+
+      margin-top: 8px;
+
+      padding: 8px 10px;
+
+      border-radius: 8px;
+
+      background:
+        rgba(34, 197, 94, 0.07);
+
+      border:
+        1px solid rgba(34, 197, 94, 0.18);
+
+      color: #86efac;
+
+      font-size: 0.72rem;
+
+      line-height: 1.5;
+    }
+
+
+    .token-info.show {
+      display: block;
+    }
+
+
+    .token-info.error {
+      background:
+        rgba(239, 68, 68, 0.07);
+
+      border-color:
+        rgba(239, 68, 68, 0.2);
+
+      color: #fca5a5;
     }
 
 
     .balance-label {
-
       display: block;
 
       margin-top: 9px;
@@ -652,16 +711,18 @@
       color: var(--text-secondary);
 
       font-size: 0.78rem;
-
     }
 
 
-    #bnbBalance {
-
+    #payBalance {
       color: #93c5fd;
-
       font-weight: 600;
+    }
 
+
+    #receiveBalance {
+      color: #93c5fd;
+      font-weight: 600;
     }
 
 
@@ -670,7 +731,6 @@
     ========================= */
 
     .swap-divider {
-
       height: 42px;
 
       display: flex;
@@ -678,20 +738,16 @@
       justify-content: center;
 
       align-items: center;
-
     }
 
 
     .swap-icon-btn {
-
       width: 38px;
-
       height: 38px;
 
       display: flex;
 
       align-items: center;
-
       justify-content: center;
 
       border-radius: 50%;
@@ -713,19 +769,16 @@
       cursor: pointer;
 
       transition: 0.25s ease;
-
     }
 
 
     .swap-icon-btn:hover {
-
       transform: rotate(180deg);
 
       border-color: var(--accent);
 
       box-shadow:
         0 0 20px rgba(56, 189, 248, 0.2);
-
     }
 
 
@@ -734,7 +787,6 @@
     ========================= */
 
     .details-box {
-
       margin: 16px 0;
 
       padding: 13px 15px;
@@ -746,12 +798,10 @@
 
       border:
         1px solid rgba(59, 130, 246, 0.13);
-
     }
 
 
     .details-row {
-
       display: flex;
 
       justify-content: space-between;
@@ -763,23 +813,18 @@
       color: var(--text-secondary);
 
       font-size: 0.8rem;
-
     }
 
 
     .details-row:last-child {
-
       margin-bottom: 0;
-
     }
 
 
     .details-row .val {
-
       color: #dbeafe;
 
       font-weight: 600;
-
     }
 
 
@@ -788,7 +833,6 @@
     ========================= */
 
     .status-box {
-
       display: none;
 
       margin-top: 12px;
@@ -800,19 +844,15 @@
       text-align: center;
 
       font-size: 0.78rem;
-
     }
 
 
     .status-box.show {
-
       display: block;
-
     }
 
 
     .status-success {
-
       background:
         rgba(34, 197, 94, 0.1);
 
@@ -820,12 +860,10 @@
         1px solid rgba(34, 197, 94, 0.25);
 
       color: #86efac;
-
     }
 
 
     .status-error {
-
       background:
         rgba(239, 68, 68, 0.1);
 
@@ -833,12 +871,10 @@
         1px solid rgba(239, 68, 68, 0.25);
 
       color: #fca5a5;
-
     }
 
 
     .status-warning {
-
       background:
         rgba(245, 158, 11, 0.1);
 
@@ -846,7 +882,6 @@
         1px solid rgba(245, 158, 11, 0.25);
 
       color: #fcd34d;
-
     }
 
 
@@ -855,7 +890,6 @@
     ========================= */
 
     .btn-swap {
-
       width: 100%;
 
       padding: 14px;
@@ -883,28 +917,23 @@
         0 10px 30px rgba(37, 99, 235, 0.28);
 
       transition: 0.25s ease;
-
     }
 
 
     .btn-swap:hover {
-
       transform: translateY(-1px);
 
       box-shadow:
         0 14px 35px rgba(37, 99, 235, 0.4);
-
     }
 
 
     .btn-swap:disabled {
-
       opacity: 0.6;
 
       cursor: not-allowed;
 
       transform: none;
-
     }
 
 
@@ -913,7 +942,6 @@
     ========================= */
 
     .features-section {
-
       position: relative;
 
       z-index: 2;
@@ -933,12 +961,10 @@
         );
 
       gap: 18px;
-
     }
 
 
     .feature-card {
-
       padding: 24px;
 
       border-radius: 16px;
@@ -956,12 +982,10 @@
       text-align: center;
 
       transition: 0.25s ease;
-
     }
 
 
     .feature-card:hover {
-
       transform: translateY(-4px);
 
       border-color:
@@ -969,14 +993,11 @@
 
       box-shadow:
         0 15px 40px rgba(0, 0, 0, 0.25);
-
     }
 
 
     .feature-icon {
-
       width: 45px;
-
       height: 45px;
 
       margin: 0 auto 14px;
@@ -984,7 +1005,6 @@
       display: flex;
 
       align-items: center;
-
       justify-content: center;
 
       border-radius: 12px;
@@ -1002,27 +1022,22 @@
       color: var(--accent);
 
       font-size: 1.25rem;
-
     }
 
 
     .feature-card h3 {
-
       color: #dbeafe;
 
       margin-bottom: 7px;
 
       font-size: 1.05rem;
-
     }
 
 
     .feature-card p {
-
       color: var(--text-secondary);
 
       font-size: 0.86rem;
-
     }
 
 
@@ -1031,7 +1046,6 @@
     ========================= */
 
     footer {
-
       width: 100%;
 
       padding: 25px 20px;
@@ -1047,7 +1061,6 @@
 
       background:
         rgba(3, 7, 18, 0.55);
-
     }
 
 
@@ -1058,85 +1071,72 @@
     @media (max-width: 700px) {
 
       header {
-
         padding: 12px 16px;
-
       }
 
 
       nav {
-
         display: none;
-
       }
 
 
       .logo {
-
         font-size: 1.35rem;
-
       }
 
 
       .btn-connect {
-
         padding: 9px 12px;
-
         font-size: 0.78rem;
-
       }
 
 
       main {
-
         padding: 45px 14px 60px;
-
       }
 
 
       .hero-text {
-
         margin-bottom: 28px;
-
       }
 
 
       .hero-text h1 {
-
         font-size: 2rem;
-
       }
 
 
       .hero-text p {
-
         font-size: 0.88rem;
-
       }
 
 
       .swap-container {
-
         padding: 16px;
-
         border-radius: 16px;
-
       }
 
 
-      .input-box input {
-
+      .input-box input.amount-input {
         font-size: 1.4rem;
+      }
 
+
+      .contract-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+
+      .verify-token-btn {
+        width: 100%;
       }
 
 
       .features-section {
-
         margin-top: 45px;
 
         grid-template-columns: 1fr;
-
       }
 
     }
@@ -1252,13 +1252,15 @@
 
 
         <span class="network-badge">
-          BNB Chain
+          BNB Chain Mainnet
         </span>
 
       </div>
 
 
-      <!-- PAY -->
+      <!-- =========================
+           PAY
+      ========================= -->
 
       <div class="input-box">
 
@@ -1267,6 +1269,7 @@
           <input
             type="number"
             id="payAmount"
+            class="amount-input"
             placeholder="0.0"
             dir="ltr"
             min="0"
@@ -1274,15 +1277,64 @@
           >
 
 
-          <div class="token-badge">
+          <div
+            class="token-badge"
+            id="payTokenBadge"
+          >
 
-            <div class="token-icon">
+            <div
+              class="token-icon"
+              id="payTokenIcon"
+            >
               B
             </div>
 
-            BNB
+            <span id="payTokenSymbol">
+              BNB
+            </span>
 
           </div>
+
+        </div>
+
+
+        <div class="contract-area">
+
+          <label
+            class="contract-label"
+            for="payContract"
+          >
+            عنوان عقد العملة BEP-20 — اختياري لـ BNB
+          </label>
+
+
+          <div class="contract-row">
+
+            <input
+              type="text"
+              id="payContract"
+              class="contract-input"
+              placeholder="0x... عنوان عقد التوكن"
+              autocomplete="off"
+              spellcheck="false"
+            >
+
+
+            <button
+              type="button"
+              class="verify-token-btn"
+              id="verifyPayTokenBtn"
+            >
+              تحقق
+            </button>
+
+          </div>
+
+
+          <div
+            id="payTokenInfo"
+            class="token-info"
+          ></div>
 
         </div>
 
@@ -1291,7 +1343,7 @@
 
           الرصيد:
 
-          <span id="bnbBalance">
+          <span id="payBalance">
             —
           </span>
 
@@ -1307,7 +1359,7 @@
         <div
           class="swap-icon-btn"
           id="reverseSwapBtn"
-          title="تبديل"
+          title="تبديل العملات"
         >
           ↓
         </div>
@@ -1315,7 +1367,9 @@
       </div>
 
 
-      <!-- RECEIVE -->
+      <!-- =========================
+           RECEIVE
+      ========================= -->
 
       <div class="input-box">
 
@@ -1324,27 +1378,83 @@
           <input
             type="number"
             id="receiveAmount"
+            class="amount-input"
             placeholder="0.0"
             readonly
             dir="ltr"
           >
 
 
-          <div class="token-badge">
+          <div
+            class="token-badge"
+            id="receiveTokenBadge"
+          >
 
-            <div class="token-icon">
+            <div
+              class="token-icon"
+              id="receiveTokenIcon"
+            >
               $
             </div>
 
-            USDT
+            <span id="receiveTokenSymbol">
+              USDT
+            </span>
 
           </div>
 
         </div>
 
 
+        <div class="contract-area">
+
+          <label
+            class="contract-label"
+            for="receiveContract"
+          >
+            عنوان عقد العملة BEP-20 — اختياري
+          </label>
+
+
+          <div class="contract-row">
+
+            <input
+              type="text"
+              id="receiveContract"
+              class="contract-input"
+              placeholder="0x... عنوان عقد التوكن"
+              autocomplete="off"
+              spellcheck="false"
+            >
+
+
+            <button
+              type="button"
+              class="verify-token-btn"
+              id="verifyReceiveTokenBtn"
+            >
+              تحقق
+            </button>
+
+          </div>
+
+
+          <div
+            id="receiveTokenInfo"
+            class="token-info"
+          ></div>
+
+        </div>
+
+
         <span class="balance-label">
-          المبلغ المقدر
+
+          الرصيد:
+
+          <span id="receiveBalance">
+            —
+          </span>
+
         </span>
 
       </div>
@@ -1426,7 +1536,7 @@
 
     <!-- =========================
          FEATURES
-    ========================== -->
+    ========================= -->
 
     <section
       id="features"
@@ -1523,7 +1633,7 @@
 
     /* =====================================================
        Web3Swap MVP
-       Network: BNB Smart Chain
+       Network: BNB Smart Chain Mainnet
        Chain ID: 56
     ===================================================== */
 
@@ -1565,6 +1675,71 @@
 
 
     /* =====================================================
+       COMMON BEP-20 FUNCTION SELECTORS
+    ===================================================== */
+
+    const ERC20_SELECTORS = {
+
+      name:
+        "0x06fdde03",
+
+      symbol:
+        "0x95d89b41",
+
+      decimals:
+        "0x313ce567",
+
+      balanceOf:
+        "0x70a08231",
+
+      totalSupply:
+        "0x18160ddd"
+
+    };
+
+
+    /* =====================================================
+       KNOWN BSC TOKENS
+    ===================================================== */
+
+    /*
+     * BNB لا يملك Contract Address لأنه Native Token.
+     *
+     * USDT على BNB Smart Chain:
+     * 0x55d398326f99059fF775485246999027B3197955
+     */
+
+    const KNOWN_TOKENS = {
+
+      BNB: {
+
+        symbol: "BNB",
+
+        name: "BNB",
+
+        decimals: 18,
+
+        address: null
+
+      },
+
+      USDT: {
+
+        symbol: "USDT",
+
+        name: "Tether USD",
+
+        decimals: 18,
+
+        address:
+          "0x55d398326f99059fF775485246999027B3197955"
+
+      }
+
+    };
+
+
+    /* =====================================================
        ELEMENTS
     ===================================================== */
 
@@ -1593,9 +1768,15 @@
       );
 
 
-    const bnbBalance =
+    const payBalance =
       document.getElementById(
-        "bnbBalance"
+        "payBalance"
+      );
+
+
+    const receiveBalance =
+      document.getElementById(
+        "receiveBalance"
       );
 
 
@@ -1617,6 +1798,66 @@
       );
 
 
+    const payContract =
+      document.getElementById(
+        "payContract"
+      );
+
+
+    const receiveContract =
+      document.getElementById(
+        "receiveContract"
+      );
+
+
+    const payTokenSymbol =
+      document.getElementById(
+        "payTokenSymbol"
+      );
+
+
+    const receiveTokenSymbol =
+      document.getElementById(
+        "receiveTokenSymbol"
+      );
+
+
+    const payTokenIcon =
+      document.getElementById(
+        "payTokenIcon"
+      );
+
+
+    const receiveTokenIcon =
+      document.getElementById(
+        "receiveTokenIcon"
+      );
+
+
+    const payTokenInfo =
+      document.getElementById(
+        "payTokenInfo"
+      );
+
+
+    const receiveTokenInfo =
+      document.getElementById(
+        "receiveTokenInfo"
+      );
+
+
+    const verifyPayTokenBtn =
+      document.getElementById(
+        "verifyPayTokenBtn"
+      );
+
+
+    const verifyReceiveTokenBtn =
+      document.getElementById(
+        "verifyReceiveTokenBtn"
+      );
+
+
     /* =====================================================
        STATE
     ===================================================== */
@@ -1628,6 +1869,37 @@
 
     let currentRate =
       null;
+
+
+    let payToken = {
+
+      symbol: "BNB",
+
+      name: "BNB",
+
+      decimals: 18,
+
+      address: null,
+
+      isNative: true
+
+    };
+
+
+    let receiveToken = {
+
+      symbol: "USDT",
+
+      name: "Tether USD",
+
+      decimals: 18,
+
+      address:
+        KNOWN_TOKENS.USDT.address,
+
+      isNative: false
+
+    };
 
 
     /* =====================================================
@@ -1659,6 +1931,1006 @@
         "";
 
     }
+
+
+    /* =====================================================
+       WALLET CHECK
+    ===================================================== */
+
+
+    function hasWallet() {
+
+      return (
+        typeof window.ethereum !==
+        "undefined"
+      );
+
+    }
+
+
+    /* =====================================================
+       HEX / ABI HELPERS
+    ===================================================== */
+
+
+    function hexToUtf8(
+      hex
+    ) {
+
+      if (!hex) {
+        return "";
+      }
+
+
+      try {
+
+        let clean =
+          hex.replace(
+            /^0x/,
+            ""
+          );
+
+
+        /*
+         * إزالة الأصفار الموجودة في نهاية
+         * ABI string عند الحاجة.
+         */
+
+        clean =
+          clean.replace(
+            /00+$/,
+            ""
+          );
+
+
+        let result = "";
+
+
+        for (
+          let i = 0;
+          i < clean.length;
+          i += 2
+        ) {
+
+          const code =
+            parseInt(
+              clean.substring(
+                i,
+                i + 2
+              ),
+              16
+            );
+
+
+          if (code !== 0) {
+
+            result +=
+              String.fromCharCode(
+                code
+              );
+
+          }
+
+        }
+
+
+        return result.trim();
+
+
+      } catch (error) {
+
+        return "";
+
+      }
+
+    }
+
+
+    function decodeAbiString(
+      hex
+    ) {
+
+      if (!hex) {
+        return "";
+      }
+
+
+      /*
+       * محاولة قراءة ABI dynamic string.
+       */
+
+      try {
+
+        const clean =
+          hex.replace(
+            /^0x/,
+            ""
+          );
+
+
+        /*
+         * بعض التوكنات القديمة ترجع
+         * bytes32 بدل string.
+         */
+
+        if (
+          clean.length === 64
+        ) {
+
+          return hexToUtf8(
+            clean
+          );
+
+        }
+
+
+        /*
+         * ABI dynamic string:
+         *
+         * offset
+         * length
+         * data
+         */
+
+        if (
+          clean.length >= 128
+        ) {
+
+          const lengthHex =
+            clean.substring(
+              64,
+              128
+            );
+
+
+          const length =
+            parseInt(
+              lengthHex,
+              16
+            );
+
+
+          if (
+            Number.isFinite(length) &&
+            length > 0
+          ) {
+
+            const data =
+              clean.substring(
+                128,
+                128 +
+                length * 2
+              );
+
+
+            return hexToUtf8(
+              data
+            );
+
+          }
+
+        }
+
+
+        return hexToUtf8(
+          clean
+        );
+
+
+      } catch (error) {
+
+        return "";
+
+      }
+
+    }
+
+
+    function isValidAddress(
+      address
+    ) {
+
+      return /^0x[a-fA-F0-9]{40}$/.test(
+        address
+      );
+
+    }
+
+
+    /* =====================================================
+       READ CONTRACT
+    ===================================================== */
+
+
+    async function readContract(
+      address,
+      data
+    ) {
+
+      if (!hasWallet()) {
+
+        throw new Error(
+          "Wallet provider not found"
+        );
+
+      }
+
+
+      return await window.ethereum.request({
+
+        method:
+          "eth_call",
+
+        params: [
+
+          {
+            to: address,
+            data: data
+          },
+
+          "latest"
+
+        ]
+
+      });
+
+    }
+
+
+    /* =====================================================
+       READ TOKEN NAME
+    ===================================================== */
+
+
+    async function readTokenName(
+      address
+    ) {
+
+      try {
+
+        const result =
+          await readContract(
+            address,
+            ERC20_SELECTORS.name
+          );
+
+
+        const value =
+          decodeAbiString(
+            result
+          );
+
+
+        return value ||
+          "Unknown Token";
+
+
+      } catch (error) {
+
+        return "Unknown Token";
+
+      }
+
+    }
+
+
+    /* =====================================================
+       READ TOKEN SYMBOL
+    ===================================================== */
+
+
+    async function readTokenSymbol(
+      address
+    ) {
+
+      try {
+
+        const result =
+          await readContract(
+            address,
+            ERC20_SELECTORS.symbol
+          );
+
+
+        const value =
+          decodeAbiString(
+            result
+          );
+
+
+        return value ||
+          "TOKEN";
+
+
+      } catch (error) {
+
+        return "TOKEN";
+
+      }
+
+    }
+
+
+    /* =====================================================
+       READ TOKEN DECIMALS
+    ===================================================== */
+
+
+    async function readTokenDecimals(
+      address
+    ) {
+
+      try {
+
+        const result =
+          await readContract(
+            address,
+            ERC20_SELECTORS.decimals
+          );
+
+
+        const clean =
+          result.replace(
+            /^0x/,
+            ""
+          );
+
+
+        const decimals =
+          parseInt(
+            clean,
+            16
+          );
+
+
+        if (
+          !Number.isFinite(
+            decimals
+          ) ||
+          decimals < 0 ||
+          decimals > 36
+        ) {
+
+          return 18;
+
+        }
+
+
+        return decimals;
+
+
+      } catch (error) {
+
+        return 18;
+
+      }
+
+    }
+
+
+    /* =====================================================
+       READ TOTAL SUPPLY
+    ===================================================== */
+
+
+    async function readTokenTotalSupply(
+      address
+    ) {
+
+      try {
+
+        const result =
+          await readContract(
+            address,
+            ERC20_SELECTORS.totalSupply
+          );
+
+
+        return BigInt(
+          result
+        );
+
+
+      } catch (error) {
+
+        return null;
+
+      }
+
+    }
+
+
+    /* =====================================================
+       VERIFY BEP-20 TOKEN
+    ===================================================== */
+
+
+    async function verifyToken(
+      address
+    ) {
+
+      if (!hasWallet()) {
+
+        throw new Error(
+          "لم يتم العثور على محفظة Web3."
+        );
+
+      }
+
+
+      if (
+        !isValidAddress(address)
+      ) {
+
+        throw new Error(
+          "عنوان العقد غير صالح."
+        );
+
+      }
+
+
+      /*
+       * التأكد من وجود Contract Code
+       */
+
+      const code =
+        await window.ethereum.request({
+
+          method:
+            "eth_getCode",
+
+          params: [
+            address,
+            "latest"
+          ]
+
+        });
+
+
+      if (
+        !code ||
+        code === "0x"
+      ) {
+
+        throw new Error(
+          "هذا العنوان ليس عقدًا ذكيًا على BNB Smart Chain."
+        );
+
+      }
+
+
+      /*
+       * قراءة بيانات BEP-20
+       */
+
+      const [
+        name,
+        symbol,
+        decimals,
+        totalSupply
+      ] = await Promise.all([
+
+        readTokenName(
+          address
+        ),
+
+        readTokenSymbol(
+          address
+        ),
+
+        readTokenDecimals(
+          address
+        ),
+
+        readTokenTotalSupply(
+          address
+        )
+
+      ]);
+
+
+      /*
+       * نرفض العقد إذا لم نستطع قراءة
+       * بيانات Token الأساسية.
+       */
+
+      if (
+        symbol === "TOKEN" &&
+        name === "Unknown Token"
+      ) {
+
+        throw new Error(
+          "تعذر قراءة بيانات BEP-20 من هذا العقد."
+        );
+
+      }
+
+
+      return {
+
+        address:
+          address,
+
+        name:
+          name,
+
+        symbol:
+          symbol,
+
+        decimals:
+          decimals,
+
+        totalSupply:
+          totalSupply,
+
+        isNative:
+          false
+
+      };
+
+    }
+
+
+    /* =====================================================
+       SHOW TOKEN
+    ===================================================== */
+
+
+    function showTokenInfo(
+      side,
+      token
+    ) {
+
+      const isPay =
+        side === "pay";
+
+
+      const symbolElement =
+        isPay
+          ? payTokenSymbol
+          : receiveTokenSymbol;
+
+
+      const iconElement =
+        isPay
+          ? payTokenIcon
+          : receiveTokenIcon;
+
+
+      const infoElement =
+        isPay
+          ? payTokenInfo
+          : receiveTokenInfo;
+
+
+      symbolElement.textContent =
+        token.symbol;
+
+
+      iconElement.textContent =
+        token.symbol
+          ? token.symbol
+              .substring(
+                0,
+                1
+              )
+              .toUpperCase()
+          : "$";
+
+
+      infoElement.classList.remove(
+        "error"
+      );
+
+
+      infoElement.classList.add(
+        "show"
+      );
+
+
+      infoElement.innerHTML =
+        "<strong>" +
+        escapeHtml(
+          token.name
+        ) +
+        "</strong>" +
+        "<br>" +
+        "Symbol: " +
+        escapeHtml(
+          token.symbol
+        ) +
+        " · Decimals: " +
+        token.decimals;
+
+    }
+
+
+    /* =====================================================
+       SHOW TOKEN ERROR
+    ===================================================== */
+
+
+    function showTokenError(
+      side,
+      message
+    ) {
+
+      const infoElement =
+        side === "pay"
+          ? payTokenInfo
+          : receiveTokenInfo;
+
+
+      infoElement.classList.add(
+        "show",
+        "error"
+      );
+
+
+      infoElement.textContent =
+        message;
+
+    }
+
+
+    /* =====================================================
+       ESCAPE HTML
+    ===================================================== */
+
+
+    function escapeHtml(
+      value
+    ) {
+
+      return String(
+        value
+      )
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+        .replace(
+          /</g,
+          "&lt;"
+        )
+        .replace(
+          />/g,
+          "&gt;"
+        )
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+        .replace(
+          /'/g,
+          "&#039;"
+        );
+
+    }
+
+
+    /* =====================================================
+       VERIFY PAY TOKEN
+    ===================================================== */
+
+
+    async function verifyPayToken() {
+
+      const address =
+        payContract.value.trim();
+
+
+      /*
+       * إذا كانت الخانة فارغة:
+       * نعيدها إلى BNB.
+       */
+
+      if (!address) {
+
+        payToken = {
+
+          symbol: "BNB",
+
+          name: "BNB",
+
+          decimals: 18,
+
+          address: null,
+
+          isNative: true
+
+        };
+
+
+        payTokenSymbol.textContent =
+          "BNB";
+
+
+        payTokenIcon.textContent =
+          "B";
+
+
+        payTokenInfo.className =
+          "token-info";
+
+
+        payBalance.textContent =
+          currentAccount
+            ? "جاري القراءة..."
+            : "—";
+
+
+        if (currentAccount) {
+
+          await loadPayTokenBalance();
+
+        }
+
+
+        return;
+
+      }
+
+
+      verifyPayTokenBtn.disabled =
+        true;
+
+
+      verifyPayTokenBtn.textContent =
+        "جاري التحقق...";
+
+
+      payTokenInfo.className =
+        "token-info";
+
+
+      try {
+
+        const token =
+          await verifyToken(
+            address
+          );
+
+
+        payToken =
+          token;
+
+
+        showTokenInfo(
+          "pay",
+          token
+        );
+
+
+        if (currentAccount) {
+
+          await loadPayTokenBalance();
+
+        }
+
+
+        showStatus(
+          "تم التعرف على " +
+          token.symbol +
+          " بنجاح.",
+          "success"
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          "Pay token verification error:",
+          error
+        );
+
+
+        payTokenInfo.className =
+          "token-info show error";
+
+
+        payTokenInfo.textContent =
+          error.message ||
+          "تعذر التحقق من العقد.";
+
+
+      } finally {
+
+        verifyPayTokenBtn.disabled =
+          false;
+
+        verifyPayTokenBtn.textContent =
+          "تحقق";
+
+      }
+
+    }
+
+
+    /* =====================================================
+       VERIFY RECEIVE TOKEN
+    ===================================================== */
+
+
+    async function verifyReceiveToken() {
+
+      const address =
+        receiveContract.value.trim();
+
+
+      /*
+       * إذا كانت الخانة فارغة:
+       * نعود إلى USDT الافتراضي.
+       */
+
+      if (!address) {
+
+        receiveToken = {
+
+          symbol: "USDT",
+
+          name: "Tether USD",
+
+          decimals: 18,
+
+          address:
+            KNOWN_TOKENS.USDT.address,
+
+          isNative: false
+
+        };
+
+
+        receiveTokenSymbol.textContent =
+          "USDT";
+
+
+        receiveTokenIcon.textContent =
+          "$";
+
+
+        receiveTokenInfo.className =
+          "token-info";
+
+
+        if (currentAccount) {
+
+          await loadReceiveTokenBalance();
+
+        }
+
+
+        return;
+
+      }
+
+
+      verifyReceiveTokenBtn.disabled =
+        true;
+
+
+      verifyReceiveTokenBtn.textContent =
+        "جاري التحقق...";
+
+
+      receiveTokenInfo.className =
+        "token-info";
+
+
+      try {
+
+        const token =
+          await verifyToken(
+            address
+          );
+
+
+        receiveToken =
+          token;
+
+
+        showTokenInfo(
+          "receive",
+          token
+        );
+
+
+        if (currentAccount) {
+
+          await loadReceiveTokenBalance();
+
+        }
+
+
+        showStatus(
+          "تم التعرف على " +
+          token.symbol +
+          " بنجاح.",
+          "success"
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          "Receive token verification error:",
+          error
+        );
+
+
+        receiveTokenInfo.className =
+          "token-info show error";
+
+
+        receiveTokenInfo.textContent =
+          error.message ||
+          "تعذر التحقق من العقد.";
+
+
+      } finally {
+
+        verifyReceiveTokenBtn.disabled =
+          false;
+
+        verifyReceiveTokenBtn.textContent =
+          "تحقق";
+
+      }
+
+    }
+
+
+    verifyPayTokenBtn.addEventListener(
+      "click",
+      verifyPayToken
+    );
+
+
+    verifyReceiveTokenBtn.addEventListener(
+      "click",
+      verifyReceiveToken
+    );
+
+
+    /* =====================================================
+       CONTRACT INPUT EVENTS
+    ===================================================== */
+
+
+    payContract.addEventListener(
+      "keydown",
+      function(event) {
+
+        if (
+          event.key === "Enter"
+        ) {
+
+          event.preventDefault();
+
+          verifyPayToken();
+
+        }
+
+      }
+    );
+
+
+    receiveContract.addEventListener(
+      "keydown",
+      function(event) {
+
+        if (
+          event.key === "Enter"
+        ) {
+
+          event.preventDefault();
+
+          verifyReceiveToken();
+
+        }
+
+      }
+    );
 
 
     /* =====================================================
@@ -1736,11 +3008,6 @@
         );
 
 
-        /*
-         * لا نستخدم سعرًا وهميًا.
-         * إذا تعذر جلب السعر، نوضح ذلك.
-         */
-
         currentRate =
           null;
 
@@ -1804,12 +3071,38 @@
       }
 
 
-      const estimated =
-        amount * currentRate;
+      /*
+       * هذه حاليًا معاينة سعر BNB/USDT فقط.
+       *
+       * عندما نربط PancakeSwap Router،
+       * سيتم استبدالها بسعر Quote حقيقي
+       * حسب التوكنات والعقود المدخلة.
+       */
 
+      if (
+        payToken.isNative &&
+        receiveToken.symbol === "USDT"
+      ) {
+
+        const estimated =
+          amount * currentRate;
+
+
+        receiveInput.value =
+          estimated.toFixed(2);
+
+        return;
+
+      }
+
+
+      /*
+       * لا نعرض سعرًا وهميًا للتوكنات
+       * المخصصة من المستخدم.
+       */
 
       receiveInput.value =
-        estimated.toFixed(2);
+        "";
 
     }
 
@@ -1818,21 +3111,6 @@
       "input",
       calculateReceive
     );
-
-
-    /* =====================================================
-       CHECK WALLET
-    ===================================================== */
-
-
-    function hasWallet() {
-
-      return (
-        typeof window.ethereum !==
-        "undefined"
-      );
-
-    }
 
 
     /* =====================================================
@@ -1894,11 +3172,6 @@
 
       } catch (error) {
 
-
-        /*
-         * الشبكة غير مضافة إلى المحفظة
-         */
-
         if (
           error &&
           error.code === 4902
@@ -1948,7 +3221,79 @@
 
 
     /* =====================================================
-       GET BNB BALANCE
+       BIGINT TOKEN BALANCE FORMAT
+    ===================================================== */
+
+
+    function formatTokenBalance(
+      rawBalance,
+      decimals
+    ) {
+
+      try {
+
+        const value =
+          BigInt(
+            rawBalance
+          );
+
+
+        const base =
+          10n **
+          BigInt(
+            decimals
+          );
+
+
+        const whole =
+          value /
+          base;
+
+
+        const fraction =
+          value %
+          base;
+
+
+        if (
+          decimals === 0
+        ) {
+
+          return whole.toString();
+
+        }
+
+
+        const fractionString =
+          fraction
+            .toString()
+            .padStart(
+              decimals,
+              "0"
+            )
+            .slice(
+              0,
+              6
+            );
+
+
+        return (
+          whole.toString() +
+          "." +
+          fractionString
+        );
+
+      } catch (error) {
+
+        return "0";
+
+      }
+
+    }
+
+
+    /* =====================================================
+       LOAD NATIVE BNB BALANCE
     ===================================================== */
 
 
@@ -1979,60 +3324,241 @@
           });
 
 
-        const balanceWei =
-          BigInt(
-            balanceHex
+        const balance =
+          formatTokenBalance(
+            balanceHex,
+            18
           );
 
 
-        const divisor =
-          1000000000000000000n;
-
-
-        const whole =
-          balanceWei /
-          divisor;
-
-
-        const fraction =
-          balanceWei %
-          divisor;
-
-
-        const fractionString =
-          fraction
-            .toString()
-            .padStart(
-              18,
-              "0"
-            )
-            .slice(
-              0,
-              6
-            );
-
-
-        const balance =
-          whole.toString() +
-          "." +
-          fractionString;
-
-
-        bnbBalance.textContent =
-          parseFloat(balance)
-            .toFixed(4) +
+        payBalance.textContent =
+          parseFloat(
+            balance
+          ).toFixed(4) +
           " BNB";
 
 
       } catch (error) {
 
         console.error(
-          "Balance error:",
+          "BNB balance error:",
           error
         );
 
 
-        bnbBalance.textContent =
+        payBalance.textContent =
+          "تعذر القراءة";
+
+      }
+
+    }
+
+
+    /* =====================================================
+       LOAD ERC20 BALANCE
+    ===================================================== */
+
+
+    async function loadERC20Balance(
+      token,
+      account
+    ) {
+
+      if (
+        !token ||
+        token.isNative ||
+        !token.address
+      ) {
+
+        return "0";
+
+      }
+
+
+      const paddedAddress =
+        account
+          .toLowerCase()
+          .replace(
+            "0x",
+            ""
+          )
+          .padStart(
+            64,
+            "0"
+          );
+
+
+      const data =
+        ERC20_SELECTORS.balanceOf +
+        paddedAddress;
+
+
+      const result =
+        await readContract(
+          token.address,
+          data
+        );
+
+
+      return formatTokenBalance(
+        result,
+        token.decimals
+      );
+
+    }
+
+
+    /* =====================================================
+       LOAD PAY TOKEN BALANCE
+    ===================================================== */
+
+
+    async function loadPayTokenBalance() {
+
+      if (!currentAccount) {
+
+        payBalance.textContent =
+          "—";
+
+        return;
+
+      }
+
+
+      payBalance.textContent =
+        "جاري القراءة...";
+
+
+      try {
+
+        if (
+          payToken.isNative
+        ) {
+
+          await loadBNBBalance(
+            currentAccount
+          );
+
+          return;
+
+        }
+
+
+        const balance =
+          await loadERC20Balance(
+            payToken,
+            currentAccount
+          );
+
+
+        payBalance.textContent =
+          parseFloat(
+            balance
+          ).toFixed(4) +
+          " " +
+          payToken.symbol;
+
+
+      } catch (error) {
+
+        console.error(
+          "Pay token balance error:",
+          error
+        );
+
+
+        payBalance.textContent =
+          "تعذر القراءة";
+
+      }
+
+    }
+
+
+    /* =====================================================
+       LOAD RECEIVE TOKEN BALANCE
+    ===================================================== */
+
+
+    async function loadReceiveTokenBalance() {
+
+      if (!currentAccount) {
+
+        receiveBalance.textContent =
+          "—";
+
+        return;
+
+      }
+
+
+      receiveBalance.textContent =
+        "جاري القراءة...";
+
+
+      try {
+
+        if (
+          receiveToken.isNative
+        ) {
+
+          const balanceHex =
+            await window.ethereum.request({
+
+              method:
+                "eth_getBalance",
+
+              params: [
+                currentAccount,
+                "latest"
+              ]
+
+            });
+
+
+          const balance =
+            formatTokenBalance(
+              balanceHex,
+              18
+            );
+
+
+          receiveBalance.textContent =
+            parseFloat(
+              balance
+            ).toFixed(4) +
+            " BNB";
+
+
+          return;
+
+        }
+
+
+        const balance =
+          await loadERC20Balance(
+            receiveToken,
+            currentAccount
+          );
+
+
+        receiveBalance.textContent =
+          parseFloat(
+            balance
+          ).toFixed(4) +
+          " " +
+          receiveToken.symbol;
+
+
+      } catch (error) {
+
+        console.error(
+          "Receive token balance error:",
+          error
+        );
+
+
+        receiveBalance.textContent =
           "تعذر القراءة";
 
       }
@@ -2087,11 +3613,9 @@
 
       try {
 
-
         /* =========================
            REQUEST ACCOUNT
         ========================= */
-
 
         const accounts =
           await window.ethereum.request({
@@ -2119,7 +3643,6 @@
         /* =========================
            CHECK NETWORK
         ========================= */
-
 
         let chainId =
           await getChainId();
@@ -2177,13 +3700,14 @@
            SAVE ACCOUNT
         ========================= */
 
-
         currentAccount =
           account;
 
 
         connectBtn.textContent =
-          shortAddress(account);
+          shortAddress(
+            account
+          );
 
 
         actionBtn.textContent =
@@ -2191,13 +3715,12 @@
 
 
         /* =========================
-           LOAD BALANCE
+           LOAD BALANCES
         ========================= */
 
+        await loadPayTokenBalance();
 
-        await loadBNBBalance(
-          account
-        );
+        await loadReceiveTokenBalance();
 
 
         showStatus(
@@ -2251,8 +3774,7 @@
 
     actionBtn.addEventListener(
       "click",
-      async function () {
-
+      async function() {
 
         /*
          * إذا لم تكن المحفظة متصلة
@@ -2267,15 +3789,6 @@
         }
 
 
-        /*
-         * في هذه المرحلة لا نرسل
-         * معاملة حقيقية.
-         *
-         * الخطوة التالية ستكون ربط
-         * PancakeSwap Router بشكل آمن.
-         */
-
-
         const amount =
           parseFloat(
             payInput.value
@@ -2288,7 +3801,9 @@
         ) {
 
           showStatus(
-            "أدخل كمية BNB أولًا.",
+            "أدخل كمية " +
+            payToken.symbol +
+            " أولًا.",
             "warning"
           );
 
@@ -2297,20 +3812,24 @@
         }
 
 
-        if (!currentRate) {
-
-          showStatus(
-            "انتظر حتى يتم جلب سعر BNB.",
-            "warning"
-          );
-
-          return;
-
-        }
-
+        /*
+         * لا يتم تنفيذ Swap حقيقي هنا.
+         *
+         * هذه النسخة تتحقق من العقود
+         * وتقرأ بيانات Tokens والأرصدة.
+         *
+         * الخطوة التالية:
+         * ربط PancakeSwap Router / Quote
+         * وتنفيذ Swap حقيقي بعد تأكيد
+         * المستخدم من المحفظة.
+         */
 
         showStatus(
-          "واجهة Swap جاهزة. تنفيذ المعاملة الحقيقية سيتم بعد ربط PancakeSwap Router.",
+          "تم تجهيز " +
+          payToken.symbol +
+          " → " +
+          receiveToken.symbol +
+          ". تنفيذ السواب الحقيقي سيتم بعد ربط PancakeSwap Router.",
           "warning"
         );
 
@@ -2325,21 +3844,110 @@
 
     reverseSwapBtn.addEventListener(
       "click",
-      function () {
+      function() {
 
-        this.style.transform =
-          "rotate(180deg)";
+        /*
+         * تبديل البيانات بين Pay و Receive
+         */
+
+        const oldPayToken =
+          payToken;
 
 
-        setTimeout(
-          () => {
+        payToken =
+          receiveToken;
 
-            this.style.transform =
-              "rotate(0deg)";
 
-          },
-          300
-        );
+        receiveToken =
+          oldPayToken;
+
+
+        const oldPayContract =
+          payContract.value;
+
+
+        payContract.value =
+          receiveToken.address ||
+          "";
+
+
+        receiveContract.value =
+          oldPayToken.address ||
+          "";
+
+
+        /*
+         * تحديث واجهة Pay
+         */
+
+        payTokenSymbol.textContent =
+          payToken.symbol;
+
+
+        payTokenIcon.textContent =
+          payToken.symbol
+            .substring(
+              0,
+              1
+            )
+            .toUpperCase();
+
+
+        /*
+         * تحديث واجهة Receive
+         */
+
+        receiveTokenSymbol.textContent =
+          receiveToken.symbol;
+
+
+        receiveTokenIcon.textContent =
+          receiveToken.symbol
+            .substring(
+              0,
+              1
+            )
+            .toUpperCase();
+
+
+        payTokenInfo.className =
+          "token-info";
+
+
+        receiveTokenInfo.className =
+          "token-info";
+
+
+        /*
+         * تبديل المبلغ أيضًا
+         */
+
+        const oldAmount =
+          payInput.value;
+
+
+        payInput.value =
+          receiveInput.value;
+
+
+        receiveInput.value =
+          oldAmount;
+
+
+        /*
+         * إعادة قراءة الأرصدة
+         */
+
+        if (currentAccount) {
+
+          loadPayTokenBalance();
+
+          loadReceiveTokenBalance();
+
+        }
+
+
+        calculateReceive();
 
       }
     );
@@ -2354,9 +3962,7 @@
 
       window.ethereum.on(
         "accountsChanged",
-        async function (
-          accounts
-        ) {
+        async function(accounts) {
 
           if (
             !accounts ||
@@ -2375,7 +3981,11 @@
               "ربط المحفظة للبدء";
 
 
-            bnbBalance.textContent =
+            payBalance.textContent =
+              "—";
+
+
+            receiveBalance.textContent =
               "—";
 
 
@@ -2401,9 +4011,9 @@
             "Swap";
 
 
-          await loadBNBBalance(
-            currentAccount
-          );
+          await loadPayTokenBalance();
+
+          await loadReceiveTokenBalance();
 
 
           showStatus(
@@ -2419,13 +4029,9 @@
          CHAIN CHANGED
       ========================= */
 
-
       window.ethereum.on(
         "chainChanged",
-        async function (
-          chainId
-        ) {
-
+        async function(chainId) {
 
           if (
             chainId !==
@@ -2438,7 +4044,11 @@
             );
 
 
-            bnbBalance.textContent =
+            payBalance.textContent =
+              "شبكة غير صحيحة";
+
+
+            receiveBalance.textContent =
               "شبكة غير صحيحة";
 
 
@@ -2455,9 +4065,9 @@
 
           if (currentAccount) {
 
-            await loadBNBBalance(
-              currentAccount
-            );
+            await loadPayTokenBalance();
+
+            await loadReceiveTokenBalance();
 
           }
 
@@ -2468,9 +4078,21 @@
 
 
     /* =====================================================
-       INITIAL PRICE LOAD
+       INITIAL STATE
     ===================================================== */
 
+
+    /*
+     * Contract Address الافتراضي لـ USDT
+     */
+
+    receiveContract.value =
+      KNOWN_TOKENS.USDT.address;
+
+
+    /*
+     * تحميل سعر BNB/USDT
+     */
 
     loadBNBPrice();
 
