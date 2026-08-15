@@ -5,19 +5,167 @@
  Web3Swap MVP
  BNB Smart Chain Mainnet
  PancakeSwap V2
+ REAL BNB → USDT SWAP
 =========================================================
 */
 
 const BSC_CHAIN_ID = "0x38";
 
+/*
+---------------------------------------------------------
+ PancakeSwap V2 Router
+---------------------------------------------------------
+*/
 const PANCAKE_ROUTER =
   "0x10ED43C718714eb63d5aA57B78B54704E256024E";
 
+/*
+---------------------------------------------------------
+ BSC Mainnet Tokens
+---------------------------------------------------------
+*/
+
+// USDT BEP-20
 const USDT_ADDRESS =
   "0x55d398326f99059ff775485246999027B3197955";
 
+// WBNB
 const WBNB_ADDRESS =
   "0xBB4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c";
+
+/*
+---------------------------------------------------------
+ Settings
+---------------------------------------------------------
+*/
+
+// Maximum amount for first Mainnet testing
+const MAX_TEST_BNB = 0.01;
+
+// Slippage tolerance
+// 0.5 = 0.5%
+const SLIPPAGE_PERCENT = 0.5;
+
+// Transaction deadline
+// 20 minutes
+const DEADLINE_MINUTES = 20;
+
+/*
+---------------------------------------------------------
+ Router ABI
+---------------------------------------------------------
+*/
+
+const PANCAKE_ROUTER_ABI = [
+
+  /*
+  getAmountsOut
+  */
+
+  {
+    name: "getAmountsOut",
+
+    type: "function",
+
+    stateMutability: "view",
+
+    inputs: [
+
+      {
+        name: "amountIn",
+        type: "uint256"
+      },
+
+      {
+        name: "path",
+        type: "address[]"
+      }
+
+    ],
+
+    outputs: [
+
+      {
+        name: "amounts",
+        type: "uint256[]"
+      }
+
+    ]
+  },
+
+  /*
+  swapExactETHForTokens
+  */
+
+  {
+    name: "swapExactETHForTokens",
+
+    type: "function",
+
+    stateMutability: "payable",
+
+    inputs: [
+
+      {
+        name: "amountOutMin",
+        type: "uint256"
+      },
+
+      {
+        name: "path",
+        type: "address[]"
+      },
+
+      {
+        name: "to",
+        type: "address"
+      },
+
+      {
+        name: "deadline",
+        type: "uint256"
+      }
+
+    ],
+
+    outputs: [
+
+      {
+        name: "amounts",
+        type: "uint256[]"
+      }
+
+    ]
+  }
+
+];
+
+/*
+---------------------------------------------------------
+ ERC-20 ABI
+---------------------------------------------------------
+*/
+
+const ERC20_ABI = [
+
+  {
+    name: "decimals",
+
+    type: "function",
+
+    stateMutability: "view",
+
+    inputs: [],
+
+    outputs: [
+      {
+        name: "",
+        type: "uint8"
+      }
+    ]
+  }
+
+];
 
 /*
 ---------------------------------------------------------
@@ -55,6 +203,8 @@ let currentChainId = null;
 
 let swapDirection = "BNB_USDT";
 
+let quoteInProgress = false;
+
 /*
 ---------------------------------------------------------
  Provider
@@ -63,10 +213,13 @@ let swapDirection = "BNB_USDT";
 
 function getProvider() {
 
-  if (typeof window.ethereum === "undefined") {
+  if (
+    typeof window.ethereum ===
+    "undefined"
+  ) {
 
     alert(
-      "لم يتم العثور على محفظة Web3."
+      "لم يتم العثور على محفظة Web3 مثل MetaMask أو Trust Wallet."
     );
 
     return null;
@@ -77,15 +230,18 @@ function getProvider() {
 
 /*
 ---------------------------------------------------------
- Check BNB Mainnet
+ Check BSC Mainnet
 ---------------------------------------------------------
 */
 
 async function checkNetwork() {
 
-  const provider = getProvider();
+  const provider =
+    getProvider();
 
-  if (!provider) return false;
+  if (!provider) {
+    return false;
+  }
 
   try {
 
@@ -94,7 +250,10 @@ async function checkNetwork() {
         method: "eth_chainId"
       });
 
-    if (currentChainId !== BSC_CHAIN_ID) {
+    if (
+      currentChainId !==
+      BSC_CHAIN_ID
+    ) {
 
       alert(
         "يرجى اختيار BNB Smart Chain Mainnet في محفظتك."
@@ -112,7 +271,52 @@ async function checkNetwork() {
       error
     );
 
+    alert(
+      "تعذر التحقق من شبكة BNB Smart Chain."
+    );
+
     return false;
+  }
+}
+
+/*
+---------------------------------------------------------
+ Format BNB Balance
+---------------------------------------------------------
+*/
+
+function formatBNBFromWei(
+  weiHex
+) {
+
+  try {
+
+    const wei =
+      BigInt(weiHex);
+
+    const whole =
+      wei /
+      BigInt("1000000000000000000");
+
+    const fraction =
+      wei %
+      BigInt("1000000000000000000");
+
+    const fractionText =
+      fraction
+        .toString()
+        .padStart(18, "0")
+        .slice(0, 4);
+
+    return (
+      whole.toString() +
+      "." +
+      fractionText
+    );
+
+  } catch (error) {
+
+    return "0.0000";
   }
 }
 
@@ -122,32 +326,42 @@ async function checkNetwork() {
 ---------------------------------------------------------
 */
 
-async function updateBNBBalance(account) {
+async function updateBNBBalance(
+  account
+) {
 
-  const provider = getProvider();
+  const provider =
+    getProvider();
 
-  if (!provider || !account) return;
+  if (
+    !provider ||
+    !account ||
+    !bnbBalance
+  ) {
+
+    return;
+  }
 
   try {
 
     const balance =
       await provider.request({
-        method: "eth_getBalance",
+
+        method:
+          "eth_getBalance",
+
         params: [
           account,
           "latest"
         ]
-      });
 
-    const balanceBNB =
-      Number(
-        BigInt(balance)
-      ) /
-      1e18;
+      });
 
     bnbBalance.innerText =
       "BNB " +
-      balanceBNB.toFixed(4);
+      formatBNBFromWei(
+        balance
+      );
 
   } catch (error) {
 
@@ -167,9 +381,13 @@ async function updateBNBBalance(account) {
 ---------------------------------------------------------
 */
 
-function shortAddress(address) {
+function shortAddress(
+  address
+) {
 
-  if (!address) return "";
+  if (!address) {
+    return "";
+  }
 
   return (
     address.substring(0, 6) +
@@ -188,20 +406,36 @@ function shortAddress(address) {
 
 async function handleWalletConnection() {
 
-  const provider = getProvider();
+  const provider =
+    getProvider();
 
-  if (!provider) return;
+  if (!provider) {
+    return;
+  }
 
   try {
+
+    /*
+    First verify BSC Mainnet.
+    */
 
     const networkOK =
       await checkNetwork();
 
-    if (!networkOK) return;
+    if (!networkOK) {
+      return;
+    }
+
+    /*
+    Request wallet.
+    */
 
     const accounts =
       await provider.request({
-        method: "eth_requestAccounts"
+
+        method:
+          "eth_requestAccounts"
+
       });
 
     if (
@@ -215,17 +449,30 @@ async function handleWalletConnection() {
     currentAccount =
       accounts[0];
 
-    connectBtn.innerText =
-      shortAddress(
-        currentAccount
-      );
+    if (connectBtn) {
 
-    actionBtn.innerText =
-      "Swap";
+      connectBtn.innerText =
+        shortAddress(
+          currentAccount
+        );
+    }
+
+    if (actionBtn) {
+
+      actionBtn.innerText =
+        "Swap";
+    }
 
     await updateBNBBalance(
       currentAccount
     );
+
+    /*
+    If there is already an amount,
+    immediately obtain real quote.
+    */
+
+    await calculateSwap();
 
   } catch (error) {
 
@@ -254,20 +501,404 @@ async function handleWalletConnection() {
 
 /*
 ---------------------------------------------------------
- Calculate Amount
+ Convert decimal BNB to Wei
 ---------------------------------------------------------
 */
 
-function calculateSwap() {
+function bnbToWei(
+  amount
+) {
 
   const value =
-    parseFloat(
-      payInput.value
-    );
+    String(amount);
 
   if (
-    Number.isNaN(value) ||
-    value <= 0
+    !/^\d+(\.\d+)?$/.test(value)
+  ) {
+
+    throw new Error(
+      "Invalid BNB amount"
+    );
+  }
+
+  const parts =
+    value.split(".");
+
+  const whole =
+    parts[0];
+
+  let decimals =
+    parts[1] || "";
+
+  if (
+    decimals.length > 18
+  ) {
+
+    throw new Error(
+      "BNB amount has more than 18 decimals."
+    );
+  }
+
+  decimals =
+    decimals
+      .padEnd(18, "0");
+
+  return BigInt(
+    whole + decimals
+  );
+}
+
+/*
+---------------------------------------------------------
+ Format USDT
+---------------------------------------------------------
+*/
+
+function formatUSDT(
+  amountWei
+) {
+
+  const value =
+    BigInt(amountWei);
+
+  const decimals =
+    BigInt(18);
+
+  const whole =
+    value /
+    BigInt(10) ** decimals;
+
+  const fraction =
+    value %
+    (BigInt(10) ** decimals);
+
+  const fractionText =
+    fraction
+      .toString()
+      .padStart(18, "0")
+      .slice(0, 2);
+
+  return (
+    whole.toString() +
+    "." +
+    fractionText
+  );
+}
+
+/*
+---------------------------------------------------------
+ Calculate amountOutMin
+---------------------------------------------------------
+*/
+
+function calculateMinimumOutput(
+  quotedAmount
+) {
+
+  /*
+    Example:
+
+    Quote = 600 USDT
+
+    Slippage = 0.5%
+
+    Minimum =
+    600 × 99.5%
+  */
+
+  const quote =
+    BigInt(quotedAmount);
+
+  const slippageBps =
+    BigInt(
+      Math.round(
+        SLIPPAGE_PERCENT * 100
+      )
+    );
+
+  const denominator =
+    BigInt(10000);
+
+  return (
+    quote *
+    (
+      denominator -
+      slippageBps
+    )
+  ) /
+  denominator;
+}
+
+/*
+---------------------------------------------------------
+ Get Real PancakeSwap Quote
+---------------------------------------------------------
+*/
+
+async function getRealQuote(
+  amountWei
+) {
+
+  const provider =
+    getProvider();
+
+  if (
+    !provider ||
+    !amountWei ||
+    amountWei <= 0n
+  ) {
+
+    return null;
+  }
+
+  try {
+
+    /*
+    Create contract interface manually
+    using eth_call.
+    */
+
+    const iface =
+      encodeGetAmountsOutCall(
+        amountWei
+      );
+
+    const result =
+      await provider.request({
+
+        method:
+          "eth_call",
+
+        params: [
+
+          {
+            to:
+              PANCAKE_ROUTER,
+
+            data:
+              iface
+          },
+
+          "latest"
+
+        ]
+
+      });
+
+    const amounts =
+      decodeUintArray(
+        result
+      );
+
+    if (
+      amounts.length < 2
+    ) {
+
+      throw new Error(
+        "Invalid PancakeSwap quote."
+      );
+    }
+
+    return amounts;
+
+  } catch (error) {
+
+    console.error(
+      "Quote error:",
+      error
+    );
+
+    throw new Error(
+      "تعذر الحصول على السعر الحقيقي من PancakeSwap. تأكد من وجود سيولة لزوج BNB/USDT."
+    );
+  }
+}
+
+/*
+---------------------------------------------------------
+ ABI Encoder: getAmountsOut
+---------------------------------------------------------
+*/
+
+function encodeGetAmountsOutCall(
+  amountWei
+) {
+
+  /*
+    Function selector:
+
+    getAmountsOut(uint256,address[])
+  */
+
+  const selector =
+    "d06ca61f";
+
+  /*
+    ABI layout:
+
+    amountIn
+    offset to address array
+    array length
+    address WBNB
+    address USDT
+  */
+
+  const amount =
+    amountWei
+      .toString(16)
+      .padStart(64, "0");
+
+  const offset =
+    BigInt(64)
+      .toString(16)
+      .padStart(64, "0");
+
+  const length =
+    BigInt(2)
+      .toString(16)
+      .padStart(64, "0");
+
+  const wbnb =
+    WBNB_ADDRESS
+      .replace("0x", "")
+      .toLowerCase()
+      .padStart(64, "0");
+
+  const usdt =
+    USDT_ADDRESS
+      .replace("0x", "")
+      .toLowerCase()
+      .padStart(64, "0");
+
+  return (
+    "0x" +
+    selector +
+    amount +
+    offset +
+    length +
+    wbnb +
+    usdt
+  );
+}
+
+/*
+---------------------------------------------------------
+ Decode uint256[]
+---------------------------------------------------------
+*/
+
+function decodeUintArray(
+  hex
+) {
+
+  if (
+    !hex ||
+    hex === "0x"
+  ) {
+
+    throw new Error(
+      "Empty RPC response."
+    );
+  }
+
+  const clean =
+    hex.replace(
+      "0x",
+      ""
+    );
+
+  /*
+    Dynamic array return format:
+
+    offset
+    length
+    values...
+  */
+
+  const offset =
+    Number(
+      BigInt(
+        "0x" +
+        clean.slice(0, 64)
+      )
+    );
+
+  const offsetHex =
+    offset * 2;
+
+  const length =
+    Number(
+      BigInt(
+        "0x" +
+        clean.slice(
+          offsetHex,
+          offsetHex + 64
+        )
+      )
+    );
+
+  const values = [];
+
+  let position =
+    offsetHex + 64;
+
+  for (
+    let i = 0;
+    i < length;
+    i++
+  ) {
+
+    const value =
+      BigInt(
+        "0x" +
+        clean.slice(
+          position,
+          position + 64
+        )
+      );
+
+    values.push(value);
+
+    position += 64;
+  }
+
+  return values;
+}
+
+/*
+---------------------------------------------------------
+ Calculate Real Swap
+---------------------------------------------------------
+*/
+
+async function calculateSwap() {
+
+  if (
+    !payInput ||
+    !receiveInput
+  ) {
+
+    return;
+  }
+
+  const value =
+    payInput.value.trim();
+
+  if (
+    value === ""
+  ) {
+
+    receiveInput.value = "";
+
+    return;
+  }
+
+  const amount =
+    Number(value);
+
+  if (
+    !Number.isFinite(amount) ||
+    amount <= 0
   ) {
 
     receiveInput.value = "";
@@ -276,78 +907,216 @@ function calculateSwap() {
   }
 
   /*
-    هذا سعر عرض MVP فقط.
-    السعر الحقيقي سيتم أخذه من Router
-    قبل تنفيذ المعاملة.
+  Only BNB → USDT is enabled.
   */
 
-  const displayRate = 600;
-
   if (
-    swapDirection ===
+    swapDirection !==
     "BNB_USDT"
   ) {
 
     receiveInput.value =
-      (value * displayRate)
-      .toFixed(2);
+      "غير متاح حاليًا";
 
-  } else {
+    return;
+  }
+
+  /*
+  Prevent multiple quote requests.
+  */
+
+  if (quoteInProgress) {
+    return;
+  }
+
+  try {
+
+    quoteInProgress = true;
 
     receiveInput.value =
-      (value / displayRate)
-      .toFixed(6);
+      "جاري الحصول على السعر...";
+
+    const amountWei =
+      bnbToWei(
+        value
+      );
+
+    const amounts =
+      await getRealQuote(
+        amountWei
+      );
+
+    const outputWei =
+      amounts[
+        amounts.length - 1
+      ];
+
+    receiveInput.value =
+      formatUSDT(
+        outputWei
+      );
+
+  } catch (error) {
+
+    console.error(
+      "Calculate swap error:",
+      error
+    );
+
+    receiveInput.value =
+      "تعذر الحصول على السعر";
+
+  } finally {
+
+    quoteInProgress = false;
   }
 }
 
 /*
 ---------------------------------------------------------
- Swap Direction
+ Reverse Swap
 ---------------------------------------------------------
 */
 
 function reverseSwap() {
 
-  if (
-    swapDirection ===
-    "BNB_USDT"
-  ) {
+  /*
+    The reverse direction is intentionally
+    disabled in this MVP.
+  */
 
-    swapDirection =
-      "USDT_BNB";
-
-  } else {
-
-    swapDirection =
-      "BNB_USDT";
-  }
-
-  calculateSwap();
+  alert(
+    "النسخة الحالية تدعم BNB → USDT فقط. سيتم إضافة USDT → BNB في الخطوة التالية."
+  );
 }
 
 /*
 ---------------------------------------------------------
- Prepare Real Swap
+ Build swap transaction
+---------------------------------------------------------
+*/
+
+function encodeSwapExactETHForTokens(
+  amountOutMin,
+  path,
+  to,
+  deadline
+) {
+
+  /*
+    Function:
+
+    swapExactETHForTokens(
+      uint256,
+      address[],
+      address,
+      uint256
+    )
+
+    Selector:
+    7ff36ab5
+  */
+
+  const selector =
+    "7ff36ab5";
+
+  /*
+    ABI head:
+
+    amountOutMin
+    offset path
+    to
+    deadline
+  */
+
+  const amountMin =
+    BigInt(amountOutMin)
+      .toString(16)
+      .padStart(64, "0");
+
+  const pathOffset =
+    BigInt(128)
+      .toString(16)
+      .padStart(64, "0");
+
+  const recipient =
+    to
+      .replace("0x", "")
+      .toLowerCase()
+      .padStart(64, "0");
+
+  const deadlineHex =
+    BigInt(deadline)
+      .toString(16)
+      .padStart(64, "0");
+
+  /*
+    Path:
+    length = 2
+
+    WBNB
+    USDT
+  */
+
+  const pathLength =
+    BigInt(path.length)
+      .toString(16)
+      .padStart(64, "0");
+
+  let pathData =
+    "";
+
+  for (
+    const address of path
+  ) {
+
+    pathData +=
+      address
+        .replace("0x", "")
+        .toLowerCase()
+        .padStart(64, "0");
+  }
+
+  return (
+    "0x" +
+    selector +
+    amountMin +
+    pathOffset +
+    recipient +
+    deadlineHex +
+    pathLength +
+    pathData
+  );
+}
+
+/*
+---------------------------------------------------------
+ Start REAL Swap
 ---------------------------------------------------------
 */
 
 async function startSwap() {
 
-  const provider = getProvider();
+  const provider =
+    getProvider();
 
-  if (!provider) return;
+  if (!provider) {
+    return;
+  }
 
   /*
-    First check network.
+  Check Mainnet.
   */
 
   const networkOK =
     await checkNetwork();
 
-  if (!networkOK) return;
+  if (!networkOK) {
+    return;
+  }
 
   /*
-    Wallet must be connected.
+  Wallet must be connected.
   */
 
   if (!currentAccount) {
@@ -358,8 +1127,7 @@ async function startSwap() {
   }
 
   /*
-    Only BNB -> USDT is enabled
-    in this MVP version.
+  Only BNB → USDT.
   */
 
   if (
@@ -368,19 +1136,24 @@ async function startSwap() {
   ) {
 
     alert(
-      "في نسخة MVP الحالية، الاتجاه المتاح هو BNB → USDT."
+      "الاتجاه المتاح حاليًا هو BNB → USDT."
     );
 
     return;
   }
 
+  /*
+  Read amount.
+  */
+
+  const value =
+    payInput.value.trim();
+
   const amount =
-    parseFloat(
-      payInput.value
-    );
+    Number(value);
 
   if (
-    Number.isNaN(amount) ||
+    !Number.isFinite(amount) ||
     amount <= 0
   ) {
 
@@ -392,122 +1165,336 @@ async function startSwap() {
   }
 
   /*
-    Safety limit for the first test.
-    Change later after successful testing.
+  Safety limit.
   */
 
-  if (amount > 0.01) {
+  if (
+    amount >
+    MAX_TEST_BNB
+  ) {
 
     alert(
-      "لأول اختبار على Mainnet، الحد الأقصى هو 0.01 BNB."
+      "لأول اختبار على Mainnet، الحد الأقصى هو " +
+      MAX_TEST_BNB +
+      " BNB."
     );
 
     return;
   }
 
   /*
-    Convert BNB to wei.
+  Convert to Wei.
   */
 
-  const weiAmount =
-    BigInt(
-      Math.floor(
-        amount * 1e18
-      )
+  let amountWei;
+
+  try {
+
+    amountWei =
+      bnbToWei(
+        value
+      );
+
+  } catch (error) {
+
+    alert(
+      "كمية BNB غير صحيحة."
     );
 
+    return;
+  }
+
   /*
-    Read current wallet balance.
+  Read current balance.
   */
 
-  const balance =
-    await provider.request({
-      method: "eth_getBalance",
-      params: [
-        currentAccount,
-        "latest"
-      ]
-    });
+  let balanceWei;
 
-  const balanceWei =
-    BigInt(balance);
+  try {
+
+    const balance =
+      await provider.request({
+
+        method:
+          "eth_getBalance",
+
+        params: [
+          currentAccount,
+          "latest"
+        ]
+
+      });
+
+    balanceWei =
+      BigInt(balance);
+
+  } catch (error) {
+
+    console.error(
+      "Balance error:",
+      error
+    );
+
+    alert(
+      "تعذر قراءة رصيد BNB."
+    );
+
+    return;
+  }
 
   /*
-    Leave some BNB for gas.
+  Reserve BNB for gas.
+
+  0.003 BNB reserve.
   */
 
   const gasReserve =
-    BigInt(
-      "3000000000000000"
+    bnbToWei(
+      "0.003"
     );
 
   if (
     balanceWei <=
-    weiAmount + gasReserve
+    amountWei +
+    gasReserve
   ) {
 
     alert(
-      "رصيد BNB غير كافٍ لإجراء Swap ودفع رسوم الشبكة."
+      "رصيد BNB غير كافٍ. اترك كمية إضافية لرسوم الشبكة."
     );
 
     return;
   }
 
   /*
-    IMPORTANT:
-    We do NOT automatically execute the
-    real PancakeSwap transaction yet.
-
-    The next step is to obtain:
-      getAmountsOut()
-      amountOutMin
-      deadline
-    and then construct the Router transaction.
+  Get REAL PancakeSwap quote.
   */
 
-  alert(
-    "تم فحص المحفظة والشبكة والرصيد بنجاح.\n\n" +
-    "Web3Swap جاهز للخطوة التالية:\n" +
-    "قراءة السعر الحقيقي من PancakeSwap ثم تنفيذ Swap."
-  );
-}
+  let amounts;
 
-/*
----------------------------------------------------------
- Events
----------------------------------------------------------
-*/
+  try {
 
-if (payInput) {
+    actionBtn.innerText =
+      "جاري قراءة السعر...";
 
-  payInput.addEventListener(
-    "input",
-    calculateSwap
-  );
-}
+    actionBtn.disabled =
+      true;
 
-if (connectBtn) {
+    amounts =
+      await getRealQuote(
+        amountWei
+      );
 
-  connectBtn.addEventListener(
-    "click",
-    handleWalletConnection
-  );
-}
+  } catch (error) {
 
-if (actionBtn) {
+    console.error(
+      error
+    );
 
-  actionBtn.addEventListener(
-    "click",
-    startSwap
-  );
-}
+    alert(
+      error.message ||
+      "تعذر الحصول على السعر الحقيقي."
+    );
 
-if (reverseSwapBtn) {
+    actionBtn.disabled =
+      false;
 
-  reverseSwapBtn.addEventListener(
-    "click",
-    reverseSwap
-  );
+    actionBtn.innerText =
+      "Swap";
+
+    return;
+  }
+
+  const quotedOutput =
+    amounts[
+      amounts.length - 1
+    ];
+
+  /*
+  Calculate minimum acceptable output
+  using 0.5% slippage.
+  */
+
+  const amountOutMin =
+    calculateMinimumOutput(
+      quotedOutput
+    );
+
+  /*
+  Deadline:
+  current time + 20 minutes.
+  */
+
+  const deadline =
+    Math.floor(
+      Date.now() / 1000
+    ) +
+    DEADLINE_MINUTES *
+    60;
+
+  /*
+  Swap path:
+
+  BNB
+   ↓
+  WBNB
+   ↓
+  USDT
+  */
+
+  const path = [
+
+    WBNB_ADDRESS,
+
+    USDT_ADDRESS
+
+  ];
+
+  /*
+  Create transaction data.
+  */
+
+  const data =
+    encodeSwapExactETHForTokens(
+      amountOutMin,
+      path,
+      currentAccount,
+      deadline
+    );
+
+  /*
+  Transaction.
+
+  IMPORTANT:
+  The BNB itself is sent as "value".
+  PancakeSwap receives the BNB,
+  wraps it into WBNB and swaps it.
+  */
+
+  const transaction = {
+
+    from:
+      currentAccount,
+
+    to:
+      PANCAKE_ROUTER,
+
+    value:
+      "0x" +
+      amountWei
+        .toString(16),
+
+    data:
+      data
+
+  };
+
+  try {
+
+    actionBtn.innerText =
+      "افتح المحفظة للتأكيد...";
+
+    /*
+    Wallet confirmation.
+    */
+
+    const txHash =
+      await provider.request({
+
+        method:
+          "eth_sendTransaction",
+
+        params: [
+          transaction
+        ]
+
+      });
+
+    console.log(
+      "Swap transaction:",
+      txHash
+    );
+
+    /*
+    Show transaction.
+    */
+
+    alert(
+      "تم إرسال معاملة Swap بنجاح.\n\n" +
+      "Transaction Hash:\n" +
+      txHash
+    );
+
+    /*
+    Open BscScan.
+    */
+
+    window.open(
+      "https://bscscan.com/tx/" +
+      txHash,
+      "_blank"
+    );
+
+    /*
+    Update UI.
+    */
+
+    actionBtn.innerText =
+      "تم إرسال Swap";
+
+    /*
+    Refresh balance after a short delay.
+    */
+
+    setTimeout(
+      async function() {
+
+        await updateBNBBalance(
+          currentAccount
+        );
+
+        actionBtn.innerText =
+          "Swap";
+
+      },
+      5000
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Swap transaction error:",
+      error
+    );
+
+    if (
+      error &&
+      error.code === 4001
+    ) {
+
+      alert(
+        "تم إلغاء المعاملة من المحفظة."
+      );
+
+    } else {
+
+      alert(
+        "فشلت معاملة Swap:\n\n" +
+        (
+          error.message ||
+          "خطأ غير معروف"
+        )
+      );
+    }
+
+    actionBtn.innerText =
+      "Swap";
+
+  } finally {
+
+    actionBtn.disabled =
+      false;
+  }
 }
 
 /*
@@ -521,8 +1508,13 @@ if (
   "undefined"
 ) {
 
+  /*
+  Account changed
+  */
+
   window.ethereum.on(
     "accountsChanged",
+
     async function(accounts) {
 
       if (
@@ -530,16 +1522,32 @@ if (
         accounts.length === 0
       ) {
 
-        currentAccount = null;
+        currentAccount =
+          null;
 
-        connectBtn.innerText =
-          "ربط المحفظة";
+        if (connectBtn) {
 
-        actionBtn.innerText =
-          "ربط المحفظة للبدء";
+          connectBtn.innerText =
+            "ربط المحفظة";
+        }
 
-        bnbBalance.innerText =
-          "—";
+        if (actionBtn) {
+
+          actionBtn.innerText =
+            "ربط المحفظة للبدء";
+        }
+
+        if (bnbBalance) {
+
+          bnbBalance.innerText =
+            "—";
+        }
+
+        if (receiveInput) {
+
+          receiveInput.value =
+            "";
+        }
 
         return;
       }
@@ -547,36 +1555,62 @@ if (
       currentAccount =
         accounts[0];
 
-      connectBtn.innerText =
-        shortAddress(
-          currentAccount
-        );
+      if (connectBtn) {
 
-      actionBtn.innerText =
-        "Swap";
+        connectBtn.innerText =
+          shortAddress(
+            currentAccount
+          );
+      }
+
+      if (actionBtn) {
+
+        actionBtn.innerText =
+          "Swap";
+      }
 
       await updateBNBBalance(
         currentAccount
       );
+
+      await calculateSwap();
     }
   );
 
+  /*
+  Chain changed
+  */
+
   window.ethereum.on(
     "chainChanged",
+
     async function(chainId) {
 
       currentChainId =
         chainId;
 
       if (
-        chainId !== BSC_CHAIN_ID
+        chainId !==
+        BSC_CHAIN_ID
       ) {
 
+        if (actionBtn) {
+
+          actionBtn.disabled =
+            true;
+        }
+
         alert(
-          "تم تغيير الشبكة. يرجى اختيار BNB Smart Chain Mainnet."
+          "تم تغيير الشبكة. يرجى العودة إلى BNB Smart Chain Mainnet."
         );
 
         return;
+      }
+
+      if (actionBtn) {
+
+        actionBtn.disabled =
+          false;
       }
 
       if (currentAccount) {
@@ -584,6 +1618,8 @@ if (
         await updateBNBBalance(
           currentAccount
         );
+
+        await calculateSwap();
       }
     }
   );
@@ -597,45 +1633,75 @@ if (
 
 async function initialize() {
 
-  const provider = getProvider();
+  const provider =
+    getProvider();
 
-  if (!provider) return;
+  if (!provider) {
+    return;
+  }
 
   try {
 
     const accounts =
       await provider.request({
-        method: "eth_accounts"
+
+        method:
+          "eth_accounts"
+
       });
 
     const chainId =
       await provider.request({
-        method: "eth_chainId"
+
+        method:
+          "eth_chainId"
+
       });
 
     currentChainId =
       chainId;
 
+    /*
+    Existing wallet connection.
+    */
+
     if (
       accounts &&
       accounts.length > 0 &&
-      chainId === BSC_CHAIN_ID
+      chainId ===
+      BSC_CHAIN_ID
     ) {
 
       currentAccount =
         accounts[0];
 
-      connectBtn.innerText =
-        shortAddress(
-          currentAccount
-        );
+      if (connectBtn) {
 
-      actionBtn.innerText =
-        "Swap";
+        connectBtn.innerText =
+          shortAddress(
+            currentAccount
+          );
+      }
+
+      if (actionBtn) {
+
+        actionBtn.innerText =
+          "Swap";
+      }
 
       await updateBNBBalance(
         currentAccount
       );
+
+      await calculateSwap();
+
+    } else {
+
+      if (actionBtn) {
+
+        actionBtn.innerText =
+          "ربط المحفظة للبدء";
+      }
     }
 
   } catch (error) {
@@ -646,5 +1712,67 @@ async function initialize() {
     );
   }
 }
+
+/*
+---------------------------------------------------------
+ Input Event
+---------------------------------------------------------
+*/
+
+if (payInput) {
+
+  payInput.addEventListener(
+    "input",
+    calculateSwap
+  );
+}
+
+/*
+---------------------------------------------------------
+ Connect Event
+---------------------------------------------------------
+*/
+
+if (connectBtn) {
+
+  connectBtn.addEventListener(
+    "click",
+    handleWalletConnection
+  );
+}
+
+/*
+---------------------------------------------------------
+ Swap Event
+---------------------------------------------------------
+*/
+
+if (actionBtn) {
+
+  actionBtn.addEventListener(
+    "click",
+    startSwap
+  );
+}
+
+/*
+---------------------------------------------------------
+ Reverse Event
+---------------------------------------------------------
+*/
+
+if (reverseSwapBtn) {
+
+  reverseSwapBtn.addEventListener(
+    "click",
+    reverseSwap
+  );
+}
+
+/*
+---------------------------------------------------------
+ Start
+---------------------------------------------------------
+*/
 
 initialize();
