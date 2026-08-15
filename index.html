@@ -1,8 +1,14 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <meta
     name="description"
@@ -12,9 +18,12 @@
   <title>Web3Swap | منصة التبادل الرقمي</title>
 
   <style>
+
     :root {
+
       --bg-main: #050b18;
       --bg-secondary: #081226;
+
       --card-bg: rgba(12, 27, 52, 0.88);
       --card-bg-light: rgba(18, 42, 78, 0.72);
 
@@ -33,12 +42,19 @@
 
       --success: #22c55e;
       --danger: #ef4444;
+      --warning: #f59e0b;
+
     }
 
+
     * {
+
       box-sizing: border-box;
+
       margin: 0;
+
       padding: 0;
+
       font-family:
         system-ui,
         -apple-system,
@@ -47,28 +63,39 @@
         Roboto,
         Arial,
         sans-serif;
+
     }
+
 
     html {
+
       scroll-behavior: smooth;
+
     }
 
+
     body {
+
       min-height: 100vh;
+
       color: var(--text-main);
+
       line-height: 1.6;
 
       background:
+
         radial-gradient(
           circle at 50% -10%,
           rgba(37, 99, 235, 0.28),
           transparent 38%
         ),
+
         radial-gradient(
           circle at 10% 40%,
           rgba(14, 165, 233, 0.12),
           transparent 30%
         ),
+
         linear-gradient(
           135deg,
           #030712 0%,
@@ -77,58 +104,88 @@
         );
 
       display: flex;
+
       flex-direction: column;
+
       overflow-x: hidden;
+
     }
+
 
     /* =========================
        HEADER
     ========================= */
 
     header {
+
       width: 100%;
+
       min-height: 72px;
 
       display: flex;
+
       align-items: center;
+
       justify-content: space-between;
 
       padding: 14px 6%;
 
       position: sticky;
+
       top: 0;
+
       z-index: 1000;
 
       background: rgba(3, 7, 18, 0.78);
-      border-bottom: 1px solid rgba(59, 130, 246, 0.18);
+
+      border-bottom:
+        1px solid rgba(59, 130, 246, 0.18);
 
       backdrop-filter: blur(18px);
+
       -webkit-backdrop-filter: blur(18px);
+
     }
 
+
     .logo {
+
       color: #ffffff;
+
       text-decoration: none;
 
       display: flex;
+
       align-items: center;
+
       gap: 5px;
 
       font-size: 1.55rem;
+
       font-weight: 800;
+
       letter-spacing: -0.5px;
+
     }
+
 
     .logo span {
+
       color: var(--accent);
+
     }
 
+
     .logo-icon {
+
       width: 34px;
+
       height: 34px;
 
       display: flex;
+
       align-items: center;
+
       justify-content: center;
 
       border-radius: 10px;
@@ -141,31 +198,50 @@
         );
 
       color: white;
+
       font-size: 17px;
 
       box-shadow:
         0 0 20px rgba(37, 99, 235, 0.35);
+
     }
+
 
     nav {
+
       display: flex;
+
       align-items: center;
+
       gap: 28px;
+
     }
+
 
     nav a {
+
       color: var(--text-secondary);
+
       text-decoration: none;
+
       font-size: 0.95rem;
+
       transition: 0.25s ease;
+
     }
+
 
     nav a:hover {
+
       color: white;
+
     }
 
+
     .btn-connect {
-      border: 1px solid rgba(96, 165, 250, 0.35);
+
+      border:
+        1px solid rgba(96, 165, 250, 0.35);
 
       background:
         linear-gradient(
@@ -177,9 +253,11 @@
       color: white;
 
       padding: 10px 18px;
+
       border-radius: 10px;
 
       font-size: 0.9rem;
+
       font-weight: 700;
 
       cursor: pointer;
@@ -188,41 +266,55 @@
         0 8px 25px rgba(37, 99, 235, 0.25);
 
       transition: 0.25s ease;
+
     }
 
+
     .btn-connect:hover {
+
       transform: translateY(-1px);
 
       box-shadow:
         0 12px 30px rgba(37, 99, 235, 0.4);
+
     }
+
 
     /* =========================
        MAIN
     ========================= */
 
     main {
+
       width: 100%;
+
       flex: 1;
 
       display: flex;
+
       flex-direction: column;
+
       align-items: center;
 
       padding: 70px 20px 80px;
 
       position: relative;
+
     }
 
+
     main::before {
+
       content: "";
 
       position: absolute;
 
       width: 500px;
+
       height: 500px;
 
       top: 100px;
+
       left: 50%;
 
       transform: translateX(-50%);
@@ -234,14 +326,18 @@
       border-radius: 50%;
 
       pointer-events: none;
+
     }
+
 
     /* =========================
        HERO
     ========================= */
 
     .hero-text {
+
       position: relative;
+
       z-index: 2;
 
       text-align: center;
@@ -249,11 +345,16 @@
       max-width: 800px;
 
       margin-bottom: 38px;
+
     }
 
+
     .hero-badge {
+
       display: inline-flex;
+
       align-items: center;
+
       gap: 8px;
 
       padding: 7px 14px;
@@ -261,17 +362,23 @@
       border-radius: 999px;
 
       background: rgba(37, 99, 235, 0.1);
-      border: 1px solid rgba(59, 130, 246, 0.25);
+
+      border:
+        1px solid rgba(59, 130, 246, 0.25);
 
       color: #93c5fd;
 
       font-size: 0.82rem;
 
       margin-bottom: 20px;
+
     }
 
+
     .hero-badge-dot {
+
       width: 7px;
+
       height: 7px;
 
       border-radius: 50%;
@@ -280,10 +387,14 @@
 
       box-shadow:
         0 0 10px rgba(34, 197, 94, 0.8);
+
     }
 
+
     .hero-text h1 {
-      font-size: clamp(2rem, 5vw, 3.4rem);
+
+      font-size:
+        clamp(2rem, 5vw, 3.4rem);
 
       line-height: 1.15;
 
@@ -292,9 +403,12 @@
       font-weight: 800;
 
       letter-spacing: -1px;
+
     }
 
+
     .hero-text h1 span {
+
       background:
         linear-gradient(
           90deg,
@@ -303,12 +417,16 @@
         );
 
       -webkit-background-clip: text;
+
       background-clip: text;
 
       color: transparent;
+
     }
 
+
     .hero-text p {
+
       color: var(--text-secondary);
 
       font-size: 1rem;
@@ -316,17 +434,22 @@
       max-width: 650px;
 
       margin: auto;
+
     }
+
 
     /* =========================
        SWAP CARD
     ========================= */
 
     .swap-container {
+
       position: relative;
+
       z-index: 3;
 
       width: 100%;
+
       max-width: 470px;
 
       padding: 22px;
@@ -340,30 +463,44 @@
           rgba(6, 18, 38, 0.95)
         );
 
-      border: 1px solid var(--border-light);
+      border:
+        1px solid var(--border-light);
 
       box-shadow:
         0 30px 80px rgba(0, 0, 0, 0.45),
         0 0 50px rgba(37, 99, 235, 0.08);
 
       backdrop-filter: blur(20px);
+
       -webkit-backdrop-filter: blur(20px);
+
     }
 
+
     .swap-header {
+
       display: flex;
+
       justify-content: space-between;
+
       align-items: center;
 
       margin-bottom: 18px;
+
     }
+
 
     .swap-header h2 {
+
       font-size: 1.25rem;
+
       font-weight: 750;
+
     }
 
+
     .network-badge {
+
       font-size: 0.72rem;
 
       padding: 5px 9px;
@@ -374,62 +511,89 @@
 
       background: rgba(37, 99, 235, 0.12);
 
-      border: 1px solid rgba(59, 130, 246, 0.22);
+      border:
+        1px solid rgba(59, 130, 246, 0.22);
+
     }
+
 
     /* =========================
        INPUT
     ========================= */
 
     .input-box {
+
       padding: 16px;
 
       background:
         rgba(3, 10, 24, 0.72);
 
-      border: 1px solid var(--border);
+      border:
+        1px solid var(--border);
 
       border-radius: 14px;
 
       transition: 0.25s ease;
+
     }
 
+
     .input-box:focus-within {
-      border-color: rgba(59, 130, 246, 0.6);
+
+      border-color:
+        rgba(59, 130, 246, 0.6);
 
       box-shadow:
         0 0 0 3px rgba(37, 99, 235, 0.08);
+
     }
 
+
     .input-row {
+
       display: flex;
+
       align-items: center;
+
       justify-content: space-between;
 
       gap: 12px;
+
     }
 
+
     .input-box input {
+
       width: 65%;
 
       background: transparent;
 
       border: none;
+
       outline: none;
 
       color: white;
 
       font-size: 1.65rem;
+
       font-weight: 600;
+
     }
+
 
     .input-box input::placeholder {
+
       color: #475569;
+
     }
 
+
     .token-badge {
+
       display: flex;
+
       align-items: center;
+
       gap: 7px;
 
       padding: 8px 12px;
@@ -443,19 +607,26 @@
           rgba(14, 165, 233, 0.1)
         );
 
-      border: 1px solid rgba(96, 165, 250, 0.25);
+      border:
+        1px solid rgba(96, 165, 250, 0.25);
 
       color: white;
 
       font-weight: 700;
+
     }
 
+
     .token-icon {
+
       width: 24px;
+
       height: 24px;
 
       display: flex;
+
       align-items: center;
+
       justify-content: center;
 
       border-radius: 50%;
@@ -468,9 +639,12 @@
         );
 
       font-size: 11px;
+
     }
 
+
     .balance-label {
+
       display: block;
 
       margin-top: 9px;
@@ -478,26 +652,46 @@
       color: var(--text-secondary);
 
       font-size: 0.78rem;
+
     }
+
+
+    #bnbBalance {
+
+      color: #93c5fd;
+
+      font-weight: 600;
+
+    }
+
 
     /* =========================
        SWAP DIVIDER
     ========================= */
 
     .swap-divider {
+
       height: 42px;
 
       display: flex;
+
       justify-content: center;
+
       align-items: center;
+
     }
 
+
     .swap-icon-btn {
+
       width: 38px;
+
       height: 38px;
 
       display: flex;
+
       align-items: center;
+
       justify-content: center;
 
       border-radius: 50%;
@@ -509,7 +703,8 @@
           #0a1b37
         );
 
-      border: 1px solid rgba(96, 165, 250, 0.3);
+      border:
+        1px solid rgba(96, 165, 250, 0.3);
 
       color: var(--accent);
 
@@ -518,34 +713,45 @@
       cursor: pointer;
 
       transition: 0.25s ease;
+
     }
 
+
     .swap-icon-btn:hover {
+
       transform: rotate(180deg);
 
       border-color: var(--accent);
 
       box-shadow:
         0 0 20px rgba(56, 189, 248, 0.2);
+
     }
+
 
     /* =========================
        DETAILS
     ========================= */
 
     .details-box {
+
       margin: 16px 0;
 
       padding: 13px 15px;
 
       border-radius: 12px;
 
-      background: rgba(3, 10, 24, 0.5);
+      background:
+        rgba(3, 10, 24, 0.5);
 
-      border: 1px solid rgba(59, 130, 246, 0.13);
+      border:
+        1px solid rgba(59, 130, 246, 0.13);
+
     }
 
+
     .details-row {
+
       display: flex;
 
       justify-content: space-between;
@@ -557,23 +763,99 @@
       color: var(--text-secondary);
 
       font-size: 0.8rem;
+
     }
+
 
     .details-row:last-child {
+
       margin-bottom: 0;
+
     }
 
+
     .details-row .val {
+
       color: #dbeafe;
 
       font-weight: 600;
+
     }
+
+
+    /* =========================
+       STATUS
+    ========================= */
+
+    .status-box {
+
+      display: none;
+
+      margin-top: 12px;
+
+      padding: 10px 12px;
+
+      border-radius: 10px;
+
+      text-align: center;
+
+      font-size: 0.78rem;
+
+    }
+
+
+    .status-box.show {
+
+      display: block;
+
+    }
+
+
+    .status-success {
+
+      background:
+        rgba(34, 197, 94, 0.1);
+
+      border:
+        1px solid rgba(34, 197, 94, 0.25);
+
+      color: #86efac;
+
+    }
+
+
+    .status-error {
+
+      background:
+        rgba(239, 68, 68, 0.1);
+
+      border:
+        1px solid rgba(239, 68, 68, 0.25);
+
+      color: #fca5a5;
+
+    }
+
+
+    .status-warning {
+
+      background:
+        rgba(245, 158, 11, 0.1);
+
+      border:
+        1px solid rgba(245, 158, 11, 0.25);
+
+      color: #fcd34d;
+
+    }
+
 
     /* =========================
        SWAP BUTTON
     ========================= */
 
     .btn-swap {
+
       width: 100%;
 
       padding: 14px;
@@ -592,6 +874,7 @@
       color: white;
 
       font-size: 1rem;
+
       font-weight: 750;
 
       cursor: pointer;
@@ -600,24 +883,43 @@
         0 10px 30px rgba(37, 99, 235, 0.28);
 
       transition: 0.25s ease;
+
     }
 
+
     .btn-swap:hover {
+
       transform: translateY(-1px);
 
       box-shadow:
         0 14px 35px rgba(37, 99, 235, 0.4);
+
     }
+
+
+    .btn-swap:disabled {
+
+      opacity: 0.6;
+
+      cursor: not-allowed;
+
+      transform: none;
+
+    }
+
 
     /* =========================
        FEATURES
     ========================= */
 
     .features-section {
+
       position: relative;
+
       z-index: 2;
 
       width: 100%;
+
       max-width: 950px;
 
       margin-top: 70px;
@@ -631,9 +933,12 @@
         );
 
       gap: 18px;
+
     }
 
+
     .feature-card {
+
       padding: 24px;
 
       border-radius: 16px;
@@ -645,14 +950,18 @@
           rgba(6, 18, 38, 0.75)
         );
 
-      border: 1px solid var(--border);
+      border:
+        1px solid var(--border);
 
       text-align: center;
 
       transition: 0.25s ease;
+
     }
 
+
     .feature-card:hover {
+
       transform: translateY(-4px);
 
       border-color:
@@ -660,16 +969,22 @@
 
       box-shadow:
         0 15px 40px rgba(0, 0, 0, 0.25);
+
     }
 
+
     .feature-icon {
+
       width: 45px;
+
       height: 45px;
 
       margin: 0 auto 14px;
 
       display: flex;
+
       align-items: center;
+
       justify-content: center;
 
       border-radius: 12px;
@@ -681,32 +996,42 @@
           rgba(56, 189, 248, 0.12)
         );
 
-      border: 1px solid rgba(59, 130, 246, 0.25);
+      border:
+        1px solid rgba(59, 130, 246, 0.25);
 
       color: var(--accent);
 
       font-size: 1.25rem;
+
     }
 
+
     .feature-card h3 {
+
       color: #dbeafe;
 
       margin-bottom: 7px;
 
       font-size: 1.05rem;
+
     }
 
+
     .feature-card p {
+
       color: var(--text-secondary);
 
       font-size: 0.86rem;
+
     }
+
 
     /* =========================
        FOOTER
     ========================= */
 
     footer {
+
       width: 100%;
 
       padding: 25px 20px;
@@ -722,7 +1047,9 @@
 
       background:
         rgba(3, 7, 18, 0.55);
+
     }
+
 
     /* =========================
        MOBILE
@@ -731,74 +1058,130 @@
     @media (max-width: 700px) {
 
       header {
+
         padding: 12px 16px;
+
       }
+
 
       nav {
+
         display: none;
+
       }
+
 
       .logo {
+
         font-size: 1.35rem;
+
       }
+
 
       .btn-connect {
+
         padding: 9px 12px;
+
         font-size: 0.78rem;
+
       }
+
 
       main {
+
         padding: 45px 14px 60px;
+
       }
+
 
       .hero-text {
+
         margin-bottom: 28px;
+
       }
+
 
       .hero-text h1 {
+
         font-size: 2rem;
+
       }
+
 
       .hero-text p {
+
         font-size: 0.88rem;
+
       }
+
 
       .swap-container {
+
         padding: 16px;
+
         border-radius: 16px;
+
       }
+
 
       .input-box input {
+
         font-size: 1.4rem;
+
       }
 
+
       .features-section {
+
         margin-top: 45px;
 
         grid-template-columns: 1fr;
+
       }
+
     }
+
   </style>
+
 </head>
+
 
 <body>
 
+
   <!-- =========================
        HEADER
-  ========================== -->
+  ========================= -->
 
   <header>
 
     <a href="#" class="logo">
-      <div class="logo-icon">⇄</div>
+
+      <div class="logo-icon">
+        ⇄
+      </div>
+
       Web3<span>Swap</span>
+
     </a>
 
+
     <nav>
-      <a href="#swap">التبادل</a>
-      <a href="#features">المميزات</a>
-      <a href="#about">عن المنصة</a>
+
+      <a href="#swap">
+        التبادل
+      </a>
+
+      <a href="#features">
+        المميزات
+      </a>
+
+      <a href="#about">
+        عن المنصة
+      </a>
+
     </nav>
+
 
     <button
       class="btn-connect"
@@ -812,27 +1195,40 @@
 
   <!-- =========================
        MAIN
-  ========================== -->
+  ========================= -->
 
   <main>
+
 
     <!-- HERO -->
 
     <div class="hero-text">
 
       <div class="hero-badge">
+
         <span class="hero-badge-dot"></span>
+
         تعمل على BNB Smart Chain
+
       </div>
 
+
       <h1>
+
         تبادل أصولك الرقمية
-        <span>بسهولة وأمان</span>
+
+        <span>
+          بسهولة وأمان
+        </span>
+
       </h1>
 
+
       <p>
+
         منصة Web3 غير حضانية للتبادل السريع
         والآمن للأصول الرقمية مباشرة من محفظتك.
+
       </p>
 
     </div>
@@ -847,11 +1243,13 @@
       class="swap-container"
     >
 
+
       <div class="swap-header">
 
         <h2>
           تبادل التوكنات
         </h2>
+
 
         <span class="network-badge">
           BNB Chain
@@ -875,6 +1273,7 @@
             step="any"
           >
 
+
           <div class="token-badge">
 
             <div class="token-icon">
@@ -887,9 +1286,15 @@
 
         </div>
 
+
         <span class="balance-label">
+
           الرصيد:
-          <span id="bnbBalance">—</span>
+
+          <span id="bnbBalance">
+            —
+          </span>
+
         </span>
 
       </div>
@@ -924,6 +1329,7 @@
             dir="ltr"
           >
 
+
           <div class="token-badge">
 
             <div class="token-icon">
@@ -936,6 +1342,7 @@
 
         </div>
 
+
         <span class="balance-label">
           المبلغ المقدر
         </span>
@@ -947,33 +1354,61 @@
 
       <div class="details-box">
 
-        <div class="details-row">
-          <span>سعر الصرف</span>
 
-          <span class="val">
-            1 BNB ≈ 600 USDT
+        <div class="details-row">
+
+          <span>
+            سعر الصرف
           </span>
+
+
+          <span
+            class="val"
+            id="rateDisplay"
+          >
+            جاري جلب السعر...
+          </span>
+
         </div>
 
+
         <div class="details-row">
-          <span>الشبكة</span>
+
+          <span>
+            الشبكة
+          </span>
+
 
           <span class="val">
             BNB Smart Chain
           </span>
+
         </div>
 
+
         <div class="details-row">
+
           <span>
             نسبة الانزلاق
           </span>
 
+
           <span class="val">
             0.50%
           </span>
+
         </div>
 
+
       </div>
+
+
+      <!-- STATUS -->
+
+      <div
+        id="statusBox"
+        class="status-box"
+      ></div>
 
 
       <!-- ACTION -->
@@ -984,6 +1419,7 @@
       >
         ربط المحفظة للبدء
       </button>
+
 
     </section>
 
@@ -997,15 +1433,18 @@
       class="features-section"
     >
 
+
       <div class="feature-card">
 
         <div class="feature-icon">
           🔐
         </div>
 
+
         <h3>
           غير حضاني
         </h3>
+
 
         <p>
           تحكم كامل بأصولك الرقمية
@@ -1021,9 +1460,11 @@
           ⚡
         </div>
 
+
         <h3>
           سريع واقتصادي
         </h3>
+
 
         <p>
           معاملات سريعة برسوم منخفضة
@@ -1039,9 +1480,11 @@
           🛡️
         </div>
 
+
         <h3>
           آمن وشفاف
         </h3>
+
 
         <p>
           التفاعل يتم مباشرة مع
@@ -1050,6 +1493,7 @@
 
       </div>
 
+
     </section>
 
   </main>
@@ -1057,7 +1501,7 @@
 
   <!-- =========================
        FOOTER
-  ========================== -->
+  ========================= -->
 
   <footer id="about">
 
@@ -1070,88 +1514,591 @@
 
   <!-- =========================
        JAVASCRIPT
-  ========================== -->
+  ========================= -->
 
   <script>
 
     "use strict";
 
 
+    /* =====================================================
+       Web3Swap MVP
+       Network: BNB Smart Chain
+       Chain ID: 56
+    ===================================================== */
+
+
+    const BSC_CHAIN_ID =
+      "0x38";
+
+
+    const BSC_CHAIN_ID_DECIMAL =
+      56;
+
+
+    const BSC_PARAMS = {
+
+      chainId: "0x38",
+
+      chainName:
+        "BNB Smart Chain",
+
+      nativeCurrency: {
+
+        name: "BNB",
+
+        symbol: "BNB",
+
+        decimals: 18
+
+      },
+
+      rpcUrls: [
+        "https://bsc-dataseed.binance.org/"
+      ],
+
+      blockExplorerUrls: [
+        "https://bscscan.com/"
+      ]
+
+    };
+
+
+    /* =====================================================
+       ELEMENTS
+    ===================================================== */
+
+
     const payInput =
-      document.getElementById("payAmount");
+      document.getElementById(
+        "payAmount"
+      );
+
 
     const receiveInput =
-      document.getElementById("receiveAmount");
+      document.getElementById(
+        "receiveAmount"
+      );
+
 
     const connectBtn =
-      document.getElementById("connectWalletBtn");
+      document.getElementById(
+        "connectWalletBtn"
+      );
+
 
     const actionBtn =
-      document.getElementById("actionBtn");
+      document.getElementById(
+        "actionBtn"
+      );
+
 
     const bnbBalance =
-      document.getElementById("bnbBalance");
+      document.getElementById(
+        "bnbBalance"
+      );
+
 
     const reverseSwapBtn =
-      document.getElementById("reverseSwapBtn");
+      document.getElementById(
+        "reverseSwapBtn"
+      );
 
 
-    const rate = 600;
+    const rateDisplay =
+      document.getElementById(
+        "rateDisplay"
+      );
 
 
-    /* =========================
-       CALCULATE SWAP
-    ========================== */
+    const statusBox =
+      document.getElementById(
+        "statusBox"
+      );
 
-    payInput.addEventListener(
-      "input",
-      function () {
 
-        const value =
-          parseFloat(this.value);
+    /* =====================================================
+       STATE
+    ===================================================== */
 
-        if (
-          !isNaN(value) &&
-          value > 0
-        ) {
 
-          receiveInput.value =
-            (value * rate).toFixed(2);
+    let currentAccount =
+      null;
 
-        } else {
 
-          receiveInput.value = "";
+    let currentRate =
+      null;
+
+
+    /* =====================================================
+       STATUS
+    ===================================================== */
+
+
+    function showStatus(
+      message,
+      type = "success"
+    ) {
+
+      statusBox.textContent =
+        message;
+
+      statusBox.className =
+        "status-box show status-" +
+        type;
+
+    }
+
+
+    function hideStatus() {
+
+      statusBox.className =
+        "status-box";
+
+      statusBox.textContent =
+        "";
+
+    }
+
+
+    /* =====================================================
+       LIVE BNB / USDT PRICE
+    ===================================================== */
+
+
+    async function loadBNBPrice() {
+
+      rateDisplay.textContent =
+        "جاري جلب السعر...";
+
+
+      try {
+
+        const response =
+          await fetch(
+            "https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT",
+            {
+              method: "GET",
+              cache: "no-store"
+            }
+          );
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            "Price API error"
+          );
 
         }
 
+
+        const data =
+          await response.json();
+
+
+        const price =
+          parseFloat(
+            data.price
+          );
+
+
+        if (
+          !Number.isFinite(price) ||
+          price <= 0
+        ) {
+
+          throw new Error(
+            "Invalid price"
+          );
+
+        }
+
+
+        currentRate =
+          price;
+
+
+        rateDisplay.textContent =
+          "1 BNB ≈ " +
+          formatNumber(price) +
+          " USDT";
+
+
+        calculateReceive();
+
+
+      } catch (error) {
+
+        console.error(
+          "Price error:",
+          error
+        );
+
+
+        /*
+         * لا نستخدم سعرًا وهميًا.
+         * إذا تعذر جلب السعر، نوضح ذلك.
+         */
+
+        currentRate =
+          null;
+
+
+        rateDisplay.textContent =
+          "تعذر جلب السعر";
+
+
+        receiveInput.value =
+          "";
+
       }
+
+    }
+
+
+    /* =====================================================
+       NUMBER FORMAT
+    ===================================================== */
+
+
+    function formatNumber(
+      number
+    ) {
+
+      return new Intl.NumberFormat(
+        "en-US",
+        {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }
+      ).format(number);
+
+    }
+
+
+    /* =====================================================
+       CALCULATE RECEIVE
+    ===================================================== */
+
+
+    function calculateReceive() {
+
+      const amount =
+        parseFloat(
+          payInput.value
+        );
+
+
+      if (
+        !Number.isFinite(amount) ||
+        amount <= 0 ||
+        !currentRate
+      ) {
+
+        receiveInput.value =
+          "";
+
+        return;
+
+      }
+
+
+      const estimated =
+        amount * currentRate;
+
+
+      receiveInput.value =
+        estimated.toFixed(2);
+
+    }
+
+
+    payInput.addEventListener(
+      "input",
+      calculateReceive
     );
 
 
-    /* =========================
-       CONNECT WALLET
-    ========================== */
+    /* =====================================================
+       CHECK WALLET
+    ===================================================== */
 
-    async function handleWalletConnection() {
 
-      if (
-        typeof window.ethereum ===
+    function hasWallet() {
+
+      return (
+        typeof window.ethereum !==
         "undefined"
-      ) {
+      );
 
-        alert(
-          "لم يتم العثور على محفظة Web3. يرجى فتح الموقع من متصفح يدعم MetaMask أو محفظة Web3."
-        );
+    }
 
-        return;
+
+    /* =====================================================
+       GET NETWORK
+    ===================================================== */
+
+
+    async function getChainId() {
+
+      if (!hasWallet()) {
+
+        return null;
+
+      }
+
+
+      return await window.ethereum.request(
+        {
+          method: "eth_chainId"
+        }
+      );
+
+    }
+
+
+    /* =====================================================
+       SWITCH TO BNB CHAIN
+    ===================================================== */
+
+
+    async function switchToBNB() {
+
+      if (!hasWallet()) {
+
+        return false;
+
       }
 
 
       try {
 
+        await window.ethereum.request({
+
+          method:
+            "wallet_switchEthereumChain",
+
+          params: [
+            {
+              chainId:
+                BSC_CHAIN_ID
+            }
+          ]
+
+        });
+
+
+        return true;
+
+
+      } catch (error) {
+
+
+        /*
+         * الشبكة غير مضافة إلى المحفظة
+         */
+
+        if (
+          error &&
+          error.code === 4902
+        ) {
+
+          try {
+
+            await window.ethereum.request({
+
+              method:
+                "wallet_addEthereumChain",
+
+              params: [
+                BSC_PARAMS
+              ]
+
+            });
+
+
+            return true;
+
+          } catch (addError) {
+
+            console.error(
+              "Add BNB network error:",
+              addError
+            );
+
+            return false;
+
+          }
+
+        }
+
+
+        console.error(
+          "Switch network error:",
+          error
+        );
+
+
+        return false;
+
+      }
+
+    }
+
+
+    /* =====================================================
+       GET BNB BALANCE
+    ===================================================== */
+
+
+    async function loadBNBBalance(
+      account
+    ) {
+
+      if (!hasWallet()) {
+
+        return;
+
+      }
+
+
+      try {
+
+        const balanceHex =
+          await window.ethereum.request({
+
+            method:
+              "eth_getBalance",
+
+            params: [
+              account,
+              "latest"
+            ]
+
+          });
+
+
+        const balanceWei =
+          BigInt(
+            balanceHex
+          );
+
+
+        const divisor =
+          1000000000000000000n;
+
+
+        const whole =
+          balanceWei /
+          divisor;
+
+
+        const fraction =
+          balanceWei %
+          divisor;
+
+
+        const fractionString =
+          fraction
+            .toString()
+            .padStart(
+              18,
+              "0"
+            )
+            .slice(
+              0,
+              6
+            );
+
+
+        const balance =
+          whole.toString() +
+          "." +
+          fractionString;
+
+
+        bnbBalance.textContent =
+          parseFloat(balance)
+            .toFixed(4) +
+          " BNB";
+
+
+      } catch (error) {
+
+        console.error(
+          "Balance error:",
+          error
+        );
+
+
+        bnbBalance.textContent =
+          "تعذر القراءة";
+
+      }
+
+    }
+
+
+    /* =====================================================
+       SHORT ADDRESS
+    ===================================================== */
+
+
+    function shortAddress(
+      address
+    ) {
+
+      return (
+        address.substring(
+          0,
+          6
+        ) +
+        "..." +
+        address.substring(
+          address.length - 4
+        )
+      );
+
+    }
+
+
+    /* =====================================================
+       CONNECT WALLET
+    ===================================================== */
+
+
+    async function connectWallet() {
+
+      hideStatus();
+
+
+      if (!hasWallet()) {
+
+        showStatus(
+          "لم يتم العثور على محفظة Web3. افتح الموقع من MetaMask أو محفظة تدعم Web3.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      try {
+
+
+        /* =========================
+           REQUEST ACCOUNT
+        ========================= */
+
+
         const accounts =
           await window.ethereum.request({
-            method: "eth_requestAccounts"
+
+            method:
+              "eth_requestAccounts"
+
           });
 
 
@@ -1169,29 +2116,93 @@
           accounts[0];
 
 
-        const shortAddress =
-          account.substring(0, 6) +
-          "..." +
-          account.substring(
-            account.length - 4
+        /* =========================
+           CHECK NETWORK
+        ========================= */
+
+
+        let chainId =
+          await getChainId();
+
+
+        if (
+          chainId !==
+          BSC_CHAIN_ID
+        ) {
+
+          showStatus(
+            "يرجى تحويل المحفظة إلى BNB Smart Chain...",
+            "warning"
           );
 
 
-        connectBtn.innerText =
-          shortAddress;
+          const switched =
+            await switchToBNB();
 
 
-        actionBtn.innerText =
-          "تبادل الآن (Swap)";
+          if (!switched) {
+
+            showStatus(
+              "تعذر تحويل المحفظة إلى BNB Smart Chain.",
+              "error"
+            );
+
+            return;
+
+          }
 
 
-        bnbBalance.innerText =
-          "متصل";
+          chainId =
+            await getChainId();
 
 
-        alert(
-          "تم اتصال المحفظة بنجاح!\n\nالعنوان:\n" +
+          if (
+            chainId !==
+            BSC_CHAIN_ID
+          ) {
+
+            showStatus(
+              "المحفظة ليست على BNB Smart Chain.",
+              "error"
+            );
+
+            return;
+
+          }
+
+        }
+
+
+        /* =========================
+           SAVE ACCOUNT
+        ========================= */
+
+
+        currentAccount =
+          account;
+
+
+        connectBtn.textContent =
+          shortAddress(account);
+
+
+        actionBtn.textContent =
+          "Swap";
+
+
+        /* =========================
+           LOAD BALANCE
+        ========================= */
+
+
+        await loadBNBBalance(
           account
+        );
+
+
+        showStatus(
+          "تم الاتصال بمحفظتك على BNB Smart Chain.",
+          "success"
         );
 
 
@@ -1208,14 +2219,16 @@
           error.code === 4001
         ) {
 
-          alert(
-            "تم رفض اتصال المحفظة."
+          showStatus(
+            "تم رفض طلب الاتصال بالمحفظة.",
+            "error"
           );
 
         } else {
 
-          alert(
-            "حدث خطأ أثناء الاتصال بالمحفظة."
+          showStatus(
+            "حدث خطأ أثناء الاتصال بالمحفظة.",
+            "error"
           );
 
         }
@@ -1225,20 +2238,89 @@
     }
 
 
-    /* =========================
-       EVENTS
-    ========================== */
+    /* =====================================================
+       BUTTON EVENTS
+    ===================================================== */
+
 
     connectBtn.addEventListener(
       "click",
-      handleWalletConnection
+      connectWallet
     );
 
 
     actionBtn.addEventListener(
       "click",
-      handleWalletConnection
+      async function () {
+
+
+        /*
+         * إذا لم تكن المحفظة متصلة
+         */
+
+        if (!currentAccount) {
+
+          await connectWallet();
+
+          return;
+
+        }
+
+
+        /*
+         * في هذه المرحلة لا نرسل
+         * معاملة حقيقية.
+         *
+         * الخطوة التالية ستكون ربط
+         * PancakeSwap Router بشكل آمن.
+         */
+
+
+        const amount =
+          parseFloat(
+            payInput.value
+          );
+
+
+        if (
+          !Number.isFinite(amount) ||
+          amount <= 0
+        ) {
+
+          showStatus(
+            "أدخل كمية BNB أولًا.",
+            "warning"
+          );
+
+          return;
+
+        }
+
+
+        if (!currentRate) {
+
+          showStatus(
+            "انتظر حتى يتم جلب سعر BNB.",
+            "warning"
+          );
+
+          return;
+
+        }
+
+
+        showStatus(
+          "واجهة Swap جاهزة. تنفيذ المعاملة الحقيقية سيتم بعد ربط PancakeSwap Router.",
+          "warning"
+        );
+
+      }
     );
+
+
+    /* =====================================================
+       REVERSE BUTTON
+    ===================================================== */
 
 
     reverseSwapBtn.addEventListener(
@@ -1248,67 +2330,164 @@
         this.style.transform =
           "rotate(180deg)";
 
-        setTimeout(() => {
 
-          this.style.transform =
-            "rotate(0deg)";
+        setTimeout(
+          () => {
 
-        }, 300);
+            this.style.transform =
+              "rotate(0deg)";
+
+          },
+          300
+        );
 
       }
     );
 
 
-    /* =========================
-       WALLET ACCOUNT CHANGE
-    ========================== */
+    /* =====================================================
+       ACCOUNT CHANGED
+    ===================================================== */
 
-    if (
-      typeof window.ethereum !==
-      "undefined"
-    ) {
+
+    if (hasWallet()) {
 
       window.ethereum.on(
         "accountsChanged",
-        function (accounts) {
+        async function (
+          accounts
+        ) {
 
           if (
+            !accounts ||
             accounts.length === 0
           ) {
 
-            connectBtn.innerText =
+            currentAccount =
+              null;
+
+
+            connectBtn.textContent =
               "ربط المحفظة";
 
-            actionBtn.innerText =
+
+            actionBtn.textContent =
               "ربط المحفظة للبدء";
 
-            bnbBalance.innerText =
+
+            bnbBalance.textContent =
               "—";
 
+
+            hideStatus();
+
+
             return;
+
           }
 
 
-          const account =
+          currentAccount =
             accounts[0];
 
 
-          connectBtn.innerText =
-            account.substring(0, 6) +
-            "..." +
-            account.substring(
-              account.length - 4
+          connectBtn.textContent =
+            shortAddress(
+              currentAccount
             );
 
-          bnbBalance.innerText =
-            "متصل";
+
+          actionBtn.textContent =
+            "Swap";
+
+
+          await loadBNBBalance(
+            currentAccount
+          );
+
+
+          showStatus(
+            "تم تحديث الحساب.",
+            "success"
+          );
+
+        }
+      );
+
+
+      /* =========================
+         CHAIN CHANGED
+      ========================= */
+
+
+      window.ethereum.on(
+        "chainChanged",
+        async function (
+          chainId
+        ) {
+
+
+          if (
+            chainId !==
+            BSC_CHAIN_ID
+          ) {
+
+            showStatus(
+              "يرجى العودة إلى BNB Smart Chain لاستخدام Web3Swap.",
+              "warning"
+            );
+
+
+            bnbBalance.textContent =
+              "شبكة غير صحيحة";
+
+
+            return;
+
+          }
+
+
+          showStatus(
+            "تم الاتصال بشبكة BNB Smart Chain.",
+            "success"
+          );
+
+
+          if (currentAccount) {
+
+            await loadBNBBalance(
+              currentAccount
+            );
+
+          }
 
         }
       );
 
     }
 
+
+    /* =====================================================
+       INITIAL PRICE LOAD
+    ===================================================== */
+
+
+    loadBNBPrice();
+
+
+    /*
+     * تحديث السعر كل 30 ثانية
+     */
+
+    setInterval(
+      loadBNBPrice,
+      30000
+    );
+
+
   </script>
 
+
 </body>
-</html>
+
+  </html>
