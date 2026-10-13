@@ -356,12 +356,15 @@ async function verify(side){
    const name=decode(nameRaw)||"Unknown Token";
    const symbol=decode(symbolRaw)||"TOKEN";
    const decimals=parseInt(decRaw,16);
+   if(!Number.isInteger(decimals)||decimals<0||decimals>255){
+     throw new Error("تعذر التحقق من عدد المنازل العشرية للتوكن؛ لم تتم إضافته.");
+   }
 
    const token={
      name,
      symbol,
      address,
-     decimals:Number.isFinite(decimals)?decimals:18,
+     decimals,
      native:false
    };
 
