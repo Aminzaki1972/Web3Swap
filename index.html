@@ -474,15 +474,19 @@ async function loadBNBPrice(){
  }
 }
 
+function isUSDT(token){
+ return !token.native&&typeof token.address==="string"&&token.address.toLowerCase()===USDT.toLowerCase();
+}
+
 function updatePrice(){
 
- if(payToken.native&&receiveToken.symbol==="USDT"&&bnbPrice){
+ if(payToken.native&&isUSDT(receiveToken)&&bnbPrice){
    $("rate").textContent="1 BNB ≈ "+bnbPrice.toFixed(2)+" USDT";
    calculate();
    return;
  }
 
- if(payToken.symbol==="USDT"&&receiveToken.native&&bnbPrice){
+ if(isUSDT(payToken)&&receiveToken.native&&bnbPrice){
    $("rate").textContent="1 USDT ≈ "+(1/bnbPrice).toFixed(6)+" BNB";
    calculate();
    return;
@@ -503,10 +507,10 @@ function calculate(){
    return;
  }
 
- if(payToken.native&&receiveToken.symbol==="USDT")
+ if(payToken.native&&isUSDT(receiveToken))
    receiveAmount.value=(a*bnbPrice).toFixed(2);
 
- else if(payToken.symbol==="USDT"&&receiveToken.native)
+ else if(isUSDT(payToken)&&receiveToken.native)
    receiveAmount.value=(a/bnbPrice).toFixed(6);
  else
    receiveAmount.value="";
