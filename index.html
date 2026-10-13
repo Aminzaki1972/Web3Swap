@@ -220,7 +220,10 @@ function applyToken(side,token){
  }else{
    contract.value=token.address;
    info.className="info show";
-   info.innerHTML=`<b>${token.name}</b><br>${token.symbol} · ${token.decimals} decimals`;
+   info.replaceChildren();
+   const tokenName=document.createElement("b");
+   tokenName.textContent=token.name;
+   info.append(tokenName,document.createElement("br"),document.createTextNode(`${token.symbol} · ${token.decimals} decimals`));
  }
 
  if(isPay) payToken=token;
@@ -371,7 +374,10 @@ async function verify(side){
    }
 
    info.className="info show";
-   info.innerHTML=`<b>${name}</b><br>${symbol} · ${token.decimals} decimals`;
+   info.replaceChildren();
+   const tokenName=document.createElement("b");
+   tokenName.textContent=name;
+   info.append(tokenName,document.createElement("br"),document.createTextNode(`${symbol} · ${token.decimals} decimals`));
 
    status(`تم التعرف على ${symbol} بنجاح.`);
 
