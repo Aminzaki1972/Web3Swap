@@ -120,14 +120,14 @@ footer{text-align:center;padding:25px;color:#64748b;font-size:.8rem}
 
 <div id="status" class="status"></div>
 
-<button id="swap" class="swap">Swap</button>
+<button id="swap" class="swap" type="button">التبديل الحقيقي غير متاح حاليًا</button>
 
 </section>
 
 <section class="features">
 <div class="feature"><h3>🔐 غير حضاني</h3><p>أموالك تبقى في محفظتك.</p></div>
-<div class="feature"><h3>⚡ سريع</h3><p>تبادل مباشر على BNB Smart Chain.</p></div>
-<div class="feature"><h3>🛡️ شفاف</h3><p>التفاعل مباشرة مع العقود الذكية.</p></div>
+<div class="feature"><h3>🧪 نسخة تجريبية</h3><p>واجهة معاينة فقط؛ لا تنفّذ تبديلًا حقيقيًا.</p></div>
+<div class="feature"><h3>🔎 قيد المراجعة</h3><p>لم يتم اعتماد تنفيذ المعاملات الحقيقية بعد.</p></div>
 </section>
 
 </main>
@@ -149,7 +149,7 @@ const TOKENS=[
  {symbol:"BNB",name:"BNB",address:"",decimals:18,native:true},
  {symbol:"USDT",name:"Tether USD",address:USDT,decimals:18},
  {symbol:"USDC",name:"USD Coin",address:"0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d",decimals:18},
- {symbol:"FDUSD",name:"First Digital USD",address:"0xc5f0f7b66764f6ec8c8c9e4f5c5f5e8e5c5f5e5c",decimals:18},
+ {symbol:"FDUSD",name:"First Digital USD",address:"0xc5f0f7b66764f6ec8c8dff7ba683102295e16409",decimals:18},
  {symbol:"CAKE",name:"PancakeSwap Token",address:"0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82",decimals:18},
  {symbol:"WBNB",name:"Wrapped BNB",address:"0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",decimals:18}
 ];
@@ -220,7 +220,10 @@ function applyToken(side,token){
  }else{
    contract.value=token.address;
    info.className="info show";
-   info.innerHTML=`<b>${token.name}</b><br>${token.symbol} · ${token.decimals} decimals`;
+   info.replaceChildren();
+   const tokenName=document.createElement("b");
+   tokenName.textContent=token.name;
+   info.append(tokenName,document.createElement("br"),document.createTextNode(`${token.symbol} · ${token.decimals} decimals`));
  }
 
  if(isPay) payToken=token;
@@ -353,12 +356,15 @@ async function verify(side){
    const name=decode(nameRaw)||"Unknown Token";
    const symbol=decode(symbolRaw)||"TOKEN";
    const decimals=parseInt(decRaw,16);
+   if(!Number.isInteger(decimals)||decimals<0||decimals>255){
+     throw new Error("تعذر التحقق من عدد المنازل العشرية للتوكن؛ لم تتم إضافته.");
+   }
 
    const token={
      name,
      symbol,
      address,
-     decimals:Number.isFinite(decimals)?decimals:18,
+     decimals,
      native:false
    };
 
@@ -371,7 +377,10 @@ async function verify(side){
    }
 
    info.className="info show";
-   info.innerHTML=`<b>${name}</b><br>${symbol} · ${token.decimals} decimals`;
+   info.replaceChildren();
+   const tokenName=document.createElement("b");
+   tokenName.textContent=name;
+   info.append(tokenName,document.createElement("br"),document.createTextNode(`${symbol} · ${token.decimals} decimals`));
 
    status(`تم التعرف على ${symbol} بنجاح.`);
 
@@ -465,15 +474,19 @@ async function loadBNBPrice(){
  }
 }
 
+function isUSDT(token){
+ return !token.native&&typeof token.address==="string"&&token.address.toLowerCase()===USDT.toLowerCase();
+}
+
 function updatePrice(){
 
- if(payToken.native&&receiveToken.symbol==="USDT"&&bnbPrice){
+ if(payToken.native&&isUSDT(receiveToken)&&bnbPrice){
    $("rate").textContent="1 BNB ≈ "+bnbPrice.toFixed(2)+" USDT";
    calculate();
    return;
  }
 
- if(payToken.symbol==="USDT"&&receiveToken.native&&bnbPrice){
+ if(isUSDT(payToken)&&receiveToken.native&&bnbPrice){
    $("rate").textContent="1 USDT ≈ "+(1/bnbPrice).toFixed(6)+" BNB";
    calculate();
    return;
@@ -494,10 +507,10 @@ function calculate(){
    return;
  }
 
- if(payToken.native&&receiveToken.symbol==="USDT")
+ if(payToken.native&&isUSDT(receiveToken))
    receiveAmount.value=(a*bnbPrice).toFixed(2);
 
- else if(payToken.symbol==="USDT"&&receiveToken.native)
+ else if(isUSDT(payToken)&&receiveToken.native)
    receiveAmount.value=(a/bnbPrice).toFixed(6);
  else
    receiveAmount.value="";
@@ -542,20 +555,9 @@ $("reverse").onclick=()=>{
    SWAP BUTTON
 ========================= */
 
-$("swap").onclick=async()=>{
-
- if(!account){
-   await connect();
-   return;
- }
-
- if(!payAmount.value||parseFloat(payAmount.value)<=0){
-   status("أدخل كمية "+payToken.symbol+" أولًا.","warning");
-   return;
- }
-
+$("swap").onclick=()=>{
  status(
-   `تم تجهيز ${payToken.symbol} → ${receiveToken.symbol}. زر Swap مفعّل، والتنفيذ الحقيقي يحتاج ربط Router الخاص بـ PancakeSwap.`,
+   "هذه نسخة تجريبية للمعاينة فقط. لم يتم ربط تنفيذ التبديل الحقيقي، ولن تُرسل أي معاملة من هذا الزر.",
    "warning"
  );
 };
