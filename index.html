@@ -120,14 +120,14 @@ footer{text-align:center;padding:25px;color:#64748b;font-size:.8rem}
 
 <div id="status" class="status"></div>
 
-<button id="swap" class="swap">Swap</button>
+<button id="swap" class="swap" type="button">التبديل الحقيقي غير متاح حاليًا</button>
 
 </section>
 
 <section class="features">
 <div class="feature"><h3>🔐 غير حضاني</h3><p>أموالك تبقى في محفظتك.</p></div>
-<div class="feature"><h3>⚡ سريع</h3><p>تبادل مباشر على BNB Smart Chain.</p></div>
-<div class="feature"><h3>🛡️ شفاف</h3><p>التفاعل مباشرة مع العقود الذكية.</p></div>
+<div class="feature"><h3>🧪 نسخة تجريبية</h3><p>واجهة معاينة فقط؛ لا تنفّذ تبديلًا حقيقيًا.</p></div>
+<div class="feature"><h3>🔎 قيد المراجعة</h3><p>لم يتم اعتماد تنفيذ المعاملات الحقيقية بعد.</p></div>
 </section>
 
 </main>
@@ -555,20 +555,9 @@ $("reverse").onclick=()=>{
    SWAP BUTTON
 ========================= */
 
-$("swap").onclick=async()=>{
-
- if(!account){
-   await connect();
-   return;
- }
-
- if(!payAmount.value||parseFloat(payAmount.value)<=0){
-   status("أدخل كمية "+payToken.symbol+" أولًا.","warning");
-   return;
- }
-
+$("swap").onclick=()=>{
  status(
-   `تم تجهيز ${payToken.symbol} → ${receiveToken.symbol}. زر Swap مفعّل، والتنفيذ الحقيقي يحتاج ربط Router الخاص بـ PancakeSwap.`,
+   "هذه نسخة تجريبية للمعاينة فقط. لم يتم ربط تنفيذ التبديل الحقيقي، ولن تُرسل أي معاملة من هذا الزر.",
    "warning"
  );
 };
